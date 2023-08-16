@@ -7,7 +7,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import DashboardSidebar from "@/components/dashboard-sidebar";
+import DashboardSidebar from "@/app/dashboard/dashboard-sidebar";
+import { Button } from "@/components/ui/button";
+import TopUpForm from "./topup-form";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import WithdrawForm from "./withdraw-form";
 
 export const metadata: Metadata = {
   title: "Account Information | Dashboard",
@@ -20,7 +28,20 @@ export default function Dashboard() {
 
       <Card className="mb-10 h-[5%] w-full md:mt-10">
         <CardHeader>
-          <CardTitle>Account Information</CardTitle>
+          <CardTitle className="flex items-center justify-between">
+            Account Information
+            <Popover>
+              <PopoverTrigger>
+                <Button variant="default" type="button">
+                  Top Up Balance
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="absolute -right-16">
+                <h3 className="mb-6 text-xl font-semibold">Top Up Balance</h3>
+                <TopUpForm />
+              </PopoverContent>
+            </Popover>
+          </CardTitle>
         </CardHeader>
         <Separator />
         <CardContent>
@@ -40,7 +61,20 @@ export default function Dashboard() {
 
             <div>
               <div className="mb-10">
-                <p className="mb-2 uppercase">Current Balance</p>
+                <div className="flex flex-row gap-4">
+                  <p className="mb-2 uppercase">Current Balance</p>
+                  <Popover>
+                    <PopoverTrigger>
+                      <p className="text-sm underline text-primary">Withdraw Balance</p>
+                    </PopoverTrigger>
+                    <PopoverContent className="absolute -right-16">
+                      <h3 className="mb-6 text-xl font-semibold">
+                        Withdraw Your Balance
+                      </h3>
+                      <WithdrawForm />
+                    </PopoverContent>
+                  </Popover>
+                </div>
                 <p className="font-medium text-primary" id="current-balance">
                   {formatter(50000)}
                 </p>
