@@ -29,8 +29,8 @@ const Notification = ({
       <li
         key={id}
         tabIndex={0}
-        className={`cursor-pointer border border-border p-3 ${
-          isSeen ? "bg-background" : "bg-muted"
+        className={`cursor-pointer rounded-md border border-border p-3 ${
+          isSeen ? "bg-background" : "bg-blue-50"
         } `}
         onClick={handleClick}
       >

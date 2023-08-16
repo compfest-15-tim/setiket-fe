@@ -53,7 +53,7 @@ const NotificationPage = () => {
     <main className="flex flex-auto justify-center bg-muted p-5 lg:p-10">
       <Card className="w-full max-w-3xl">
         <CardHeader>
-          <CardTitle>Notification</CardTitle>
+          <CardTitle className="text-primary">Notification</CardTitle>
         </CardHeader>
         <CardContent>
           <ul className="flex flex-col gap-2">
