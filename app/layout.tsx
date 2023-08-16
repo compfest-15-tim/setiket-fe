@@ -26,7 +26,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en" className={`${inter.variable}`}>
       <body
-        className={`font-inter flex min-h-screen flex-col bg-background ${
+        className={`flex min-h-screen flex-col font-inter ${
           navBarExpanded && "overflow-hidden"
         }`}
       >

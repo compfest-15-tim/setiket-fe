@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 const SignUp = () => {
   return (
-    <main className="flex flex-auto items-center justify-center p-5 sm:p-10">
+    <main className="flex flex-auto items-center justify-center bg-muted p-5 sm:p-10">
       <div className="flex w-full max-w-xs flex-col gap-4 xl:gap-5">
         {/* Title */}
         <h1 className="text-center text-3xl font-bold text-primary xl:text-4xl">
