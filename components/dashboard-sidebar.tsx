@@ -10,7 +10,14 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
-import { LogOut, Ban, User, ShoppingCart, PartyPopper, Users } from "lucide-react";
+import {
+  LogOut,
+  Ban,
+  User,
+  ShoppingCart,
+  PartyPopper,
+  Users,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
@@ -20,7 +27,7 @@ export default function DashboardSidebar() {
   const customerMenus = [
     {
       name: "My Order",
-      url: "/my-order",
+      url: "/dashboard/my-order",
       icon: <ShoppingCart />,
     },
   ];
@@ -28,7 +35,7 @@ export default function DashboardSidebar() {
   const eventOrganizerMenus = [
     {
       name: "My Events",
-      url: "/my-events",
+      url: "/dashboard/my-events",
       icon: <PartyPopper />,
     },
   ];
@@ -36,18 +43,18 @@ export default function DashboardSidebar() {
   const adminMenus = [
     {
       name: "Event Organizers",
-      url: "/event-organizers",
+      url: "/dashboard/event-organizers",
       icon: <Users />,
     },
     {
       name: "Events",
-      url: "/events",
+      url: "/dashboard/events",
       icon: <PartyPopper />,
     },
   ];
 
   return (
-    <Card className="mt-10 h-[5%] w-full md:w-1/4">
+    <Card className="mt-10 h-[5%] w-full lg:max-w-xs">
       <CardHeader>
         <CardTitle>Henry Salim</CardTitle>
         <CardDescription>
@@ -71,16 +78,16 @@ export default function DashboardSidebar() {
         <ul>
           <li className="mb-3">
             <Link
-              href="/dashboard"
+              href="/dashboard/my-account"
               className={cn(
                 "flex w-full items-center gap-3 rounded-md p-3 duration-300 ease-in-out hover:bg-gray-200 hover:text-primary",
-                pathname == "/dashboard"
+                pathname == "/dashboard/my-account"
                   ? "bg-gray-200 font-semibold text-primary"
                   : ""
               )}
             >
               <User />
-              Account Information
+              My Account
             </Link>
           </li>
 
