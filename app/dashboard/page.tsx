@@ -79,7 +79,7 @@ export default function Dashboad() {
                   {formatter(50000)}
                 </p>
               </div>
-              <div className="mb-10">
+              <div>
                 <p className="mb-2 uppercase">Registered as</p>
                 <p className="font-medium text-primary" id="current-balance">
                   Customer
