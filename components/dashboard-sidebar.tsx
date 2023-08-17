@@ -20,7 +20,7 @@ export default function DashboardSidebar() {
   const customerMenus = [
     {
       name: "My Order",
-      url: "/dashboard/my-order",
+      url: "/my-order",
       icon: <ShoppingCart />,
     },
   ];
@@ -28,7 +28,7 @@ export default function DashboardSidebar() {
   const eventOrganizerMenus = [
     {
       name: "My Events",
-      url: "/dashboard/my-events",
+      url: "/my-events",
       icon: <PartyPopper />,
     },
   ];
@@ -36,12 +36,12 @@ export default function DashboardSidebar() {
   const adminMenus = [
     {
       name: "Event Organizers",
-      url: "/dashboard/event-organizers",
+      url: "/event-organizers",
       icon: <Users />,
     },
     {
       name: "Events",
-      url: "/dashboard/events",
+      url: "/events",
       icon: <PartyPopper />,
     },
   ];
