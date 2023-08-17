@@ -17,7 +17,7 @@ import {
 export default function WithdrawForm() {
   // Form Schema Validation
   const formSchema = z.object({
-    balance: z.number(),
+    balance: z.string(),
   });
 
   // Form Hook
