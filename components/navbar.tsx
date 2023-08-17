@@ -108,10 +108,7 @@ const NavBar = ({
 
                 <DropdownMenuContent>
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <Link href="/settings/">
-                    <DropdownMenuItem>Settings</DropdownMenuItem>
-                  </Link>
-                  <Link href="/dashboard/">
+                  <Link href="/dashboard/my-account">
                     <DropdownMenuItem>Dashboard</DropdownMenuItem>
                   </Link>
                   {/* Add more if needed */}
