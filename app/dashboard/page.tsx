@@ -1,4 +1,3 @@
-import { Metadata } from "next";
 import {
   Card,
   CardContent,
@@ -7,7 +6,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import DashboardSidebar from "@/app/dashboard/dashboard-sidebar";
 import { Button } from "@/components/ui/button";
 import TopUpForm from "./topup-form";
 import {
@@ -16,16 +14,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import WithdrawForm from "./withdraw-form";
+import { Metadata } from "next";
+import Layout from "../dashboard-layout";
 
 export const metadata: Metadata = {
   title: "Account Information | Dashboard",
 };
 
-export default function Dashboard() {
+export default function Dashboad() {
   return (
-    <main className="flex flex-auto flex-col gap-6 bg-gray-100 px-16 md:flex-row">
-      <DashboardSidebar />
-
+    <Layout>
       <Card className="mb-10 h-[5%] w-full md:mt-10">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
@@ -65,7 +63,9 @@ export default function Dashboard() {
                   <p className="mb-2 uppercase">Current Balance</p>
                   <Popover>
                     <PopoverTrigger>
-                      <p className="text-sm underline text-primary">Withdraw Balance</p>
+                      <p className="text-sm text-primary underline">
+                        Withdraw Balance
+                      </p>
                     </PopoverTrigger>
                     <PopoverContent className="absolute -right-16">
                       <h3 className="mb-6 text-xl font-semibold">
@@ -93,7 +93,7 @@ export default function Dashboard() {
           <small className="text-gray-400">Created at: 16 Aug 2023</small>
         </CardFooter>
       </Card>
-    </main>
+    </Layout>
   );
 }
 
