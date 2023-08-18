@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: "Create Event | SeTiket",
 };
 
-export const MyEventsDetailPage = () => {
+const MyEventsDetailPage = () => {
   // Get Event data
 
   return (

@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: "My Events | SeTiket",
 };
 
-export const MyEventsPage = () => {
+const MyEventsPage = () => {
   const myEvents = [
     {
       id: "7b92a264-5ff2-4ea1-b5ef-62c2b9cda87a",
