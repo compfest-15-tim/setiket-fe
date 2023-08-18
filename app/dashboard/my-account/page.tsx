@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 export default function Dashboad() {
   return (
-    <Card className="mb-10 h-[5%] w-full md:mt-10">
+    <Card className="h-[5%] w-full">
       <CardHeader>
         <CardTitle className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
           My Account
