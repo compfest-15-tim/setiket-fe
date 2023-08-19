@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: "Create Event | SeTiket",
 };
 
-const MyEventsDetailPage = () => {
+const CreateEventPage = () => {
   // Get Event data
 
   return (
@@ -48,4 +48,4 @@ const MyEventsDetailPage = () => {
   );
 };
 
-export default MyEventsDetailPage;
+export default CreateEventPage;
