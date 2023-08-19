@@ -348,7 +348,7 @@ const inputFilter: InputFilter = {
   placeholder: "Filter by full name...",
 };
 
-export const CustomerDataTable = () => {
+const CustomerDataTable = () => {
   return <DataTable columns={columns} data={data} inputFilter={inputFilter} />;
 };
 

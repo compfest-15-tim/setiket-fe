@@ -6,13 +6,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { Badge } from "@/components/ui/badge";
 import { BarChart4, MoreHorizontal } from "lucide-react";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import {
-  Trash2,
-  FileEdit,
-  CheckCircle2,
-  Clock,
-  XCircle,
-} from "lucide-react";
+import { Trash2, FileEdit, CheckCircle2, Clock, XCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,7 +14,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { InputFilter, FacetedFilter } from "@/types/data-table";
@@ -296,7 +289,7 @@ const facetedFilters: FacetedFilter[] = [
   },
 ];
 
-export const MyEventsTable = () => {
+const MyEventsTable = () => {
   return (
     <DataTable
       columns={columns}

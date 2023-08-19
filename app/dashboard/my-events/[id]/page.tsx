@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "My Events | SeTiket",
 };
 
-export const MyEventsDetailPage = () => {
+const MyEventsDetailPage = () => {
   // Get Event data
   const event = {
     id: "7b92a264-5ff2-4ea1-b5ef-62c2b9cda87a",
@@ -57,7 +57,7 @@ export const MyEventsDetailPage = () => {
 
             {/* Price per one ticket */}
             <p className="text-base font-medium">
-              Price per ticket : {getCurrencyIDR(pricePerTicket)}
+              Price per Ticket : {getCurrencyIDR(pricePerTicket)}
             </p>
 
             {/* Total Profit */}
