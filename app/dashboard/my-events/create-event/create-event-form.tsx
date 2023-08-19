@@ -185,6 +185,7 @@ const CreateEventForm = () => {
                       accept="image/*"
                       multiple={true}
                       disabled={form.formState.isSubmitting}
+                      {...field}
                       onChange={(event) => {
                         // Triggered when user uploaded a new file
                         // FileList is immutable, so we need to create a new one
@@ -206,7 +207,6 @@ const CreateEventForm = () => {
                         const newFiles = dataTransfer.files;
                         onChange(newFiles);
                       }}
-                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
