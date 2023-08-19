@@ -55,8 +55,8 @@ const CreateEventForm = () => {
       ),
     date: z.date(),
     location: z.string(),
-    capacity: z.coerce.number().gt(0),
-    price: z.coerce.number().gt(0),
+    capacity: z.coerce.number({ invalid_type_error: "Required" }).gt(0),
+    price: z.coerce.number({ invalid_type_error: "Required" }).gt(0),
   });
 
   // Form Hook
