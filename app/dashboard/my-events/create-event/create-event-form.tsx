@@ -5,7 +5,7 @@ import * as z from "zod";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { CalendarIcon, Loader2 } from "lucide-react";
+import { CalendarIcon, Loader2, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,6 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import Image from "next/image";
 
 const CreateEventForm = () => {
   // Images
@@ -41,10 +42,12 @@ const CreateEventForm = () => {
     description: z.string(),
     images: z
       .custom<FileList>((val) => val instanceof FileList, "Required")
+      .refine((files) => files.length > 0, `Required`)
+      .refine((files) => files.length <= 5, `Maximum of 5 images are allowed.`)
       .refine(
         (files) =>
           Array.from(files).every((file) => file.size <= MAX_IMAGE_SIZE),
-        `File size should be less than 5 MB.`
+        `Each file size should be less than 5 MB.`
       )
       .refine(
         (files) =>
@@ -120,22 +123,96 @@ const CreateEventForm = () => {
           <FormField
             control={form.control}
             name="images"
-            render={({ field: { onChange }, ...field }) => (
-              <FormItem>
-                <FormLabel>Images</FormLabel>
-                <FormControl>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    multiple={true}
-                    disabled={form.formState.isSubmitting}
-                    onChange={(event) => onChange(event.target.files)}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={({ field: { onChange }, ...field }) => {
+              // Get current images value (always watched updated)
+              const images = form.watch("images");
+
+              return (
+                <FormItem>
+                  <FormLabel>Images</FormLabel>
+                  {/* Images List */}
+                  {images && (
+                    <div className="flex flex-row flex-wrap items-center gap-3">
+                      {Array.from(images).map((image, mapIndex) => {
+                        // Get image title and url
+                        const url = URL.createObjectURL(image);
+                        const title = image.name;
+
+                        return (
+                          <div key={url} className="group relative">
+                            {/* Delete Button */}
+                            <Button
+                              variant="destructive"
+                              size="icon"
+                              className="absolute right-0 top-0 h-7 w-7 transition duration-300 xl:opacity-0 xl:group-hover:opacity-100"
+                              onClick={() => {
+                                // Filter out the image that will be deleted
+                                // FileList is immutable, so we need to create a new one
+                                const dataTransfer = new DataTransfer();
+                                Array.from(images).forEach(
+                                  (image, filterIdx) => {
+                                    if (filterIdx !== mapIndex)
+                                      return dataTransfer.items.add(image);
+                                  }
+                                );
+
+                                // Validate and update removed file
+                                const newFiles = dataTransfer.files;
+                                onChange(newFiles);
+                              }}
+                            >
+                              <XCircle className="h-5 w-5" />
+                            </Button>
+
+                            {/* Image */}
+                            <Image
+                              width={150}
+                              height={150}
+                              alt={title}
+                              src={url}
+                              className="aspect-square w-24 rounded-lg object-cover object-center lg:w-36"
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {/* File Upload */}
+                  <FormControl>
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      multiple={true}
+                      disabled={form.formState.isSubmitting}
+                      onChange={(event) => {
+                        // Triggered when user uploaded a new file
+                        // FileList is immutable, so we need to create a new one
+                        const dataTransfer = new DataTransfer();
+
+                        // Add old images
+                        if (images) {
+                          Array.from(images).forEach((image) =>
+                            dataTransfer.items.add(image)
+                          );
+                        }
+
+                        // Add newly uploaded images
+                        Array.from(event.target.files!).forEach((image) =>
+                          dataTransfer.items.add(image)
+                        );
+
+                        // Validate and update uploaded file
+                        const newFiles = dataTransfer.files;
+                        onChange(newFiles);
+                      }}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
 
           {/* Date */}

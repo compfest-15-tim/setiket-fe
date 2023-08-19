@@ -182,7 +182,7 @@ const columns: ColumnDef<Event>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const event = row.original;
+      const id = row.original.id;
 
       return (
         <DropdownMenu>
@@ -194,17 +194,19 @@ const columns: ColumnDef<Event>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <Link href={`/dashboard/my-events/${row.original.id}`}>
+            <Link href={`/dashboard/my-events/${id}`}>
               <DropdownMenuItem>
                 <BarChart4 className="mr-2 h-4 w-4 stroke-popover-foreground" />
                 View Detail
               </DropdownMenuItem>
             </Link>
-            <DropdownMenuItem>
-              <FileEdit className="mr-2 h-4 w-4 stroke-popover-foreground" />
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive hover:text-destructive">
+            <Link href={`/dashboard/my-events/${id}/edit`}>
+              <DropdownMenuItem>
+                <FileEdit className="mr-2 h-4 w-4 stroke-popover-foreground" />
+                Edit
+              </DropdownMenuItem>
+            </Link>
+            <DropdownMenuItem className="text-destructive focus:text-destructive">
               <Trash2 className="mr-2 h-4 w-4 stroke-destructive" />
               Delete
             </DropdownMenuItem>

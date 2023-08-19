@@ -113,7 +113,7 @@ const NavBar = ({
                   </Link>
                   {/* Add more if needed */}
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="flex flex-row gap-2 text-destructive">
+                  <DropdownMenuItem className="flex flex-row gap-2 text-destructive focus:text-destructive">
                     <LogOut className="stroke-destructive" size={16} />
                     Log Out
                   </DropdownMenuItem>
