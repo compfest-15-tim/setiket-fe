@@ -54,7 +54,7 @@ export default function DashboardSidebar() {
   ];
 
   return (
-    <Card className="mt-10 h-[5%] w-full lg:max-w-xs">
+    <Card className="h-[5%] w-full lg:max-w-xs">
       <CardHeader>
         <CardTitle>Henry Salim</CardTitle>
         <CardDescription>
