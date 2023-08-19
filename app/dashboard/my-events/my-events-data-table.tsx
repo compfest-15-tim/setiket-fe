@@ -9,7 +9,6 @@ import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 import {
   Trash2,
   FileEdit,
-  Copy,
   CheckCircle2,
   Clock,
   XCircle,
