@@ -19,84 +19,84 @@ import {
 export interface RegisteredUsers {
   id: string;
   email: string;
-  full_name: string;
+  fullName: string;
   role: "Customer" | "Admin" | "Event Organizer";
-  status: "verified" | "pending" | "rejected" | boolean;
-  created_at: string;
+  status: "verified" | "pending" | "rejected";
+  createdAt: string;
 }
 
 const users: RegisteredUsers[] = [
   {
     id: "2f0d36e2-6e42-4baf-bf35-01d0764a29d1",
     email: "user1@example.com",
-    full_name: "John Doe",
+    fullName: "John Doe",
     role: "Customer",
     status: "verified",
-    created_at: "2023-08-19T12:30:45Z",
+    createdAt: "2023-08-19T12:30:45Z",
   },
   {
     id: "f794a841-2955-4d64-8f62-4e07e2d3e82a",
     email: "user2@example.com",
-    full_name: "Jane Smith",
+    fullName: "Jane Smith",
     role: "Admin",
     status: "pending",
-    created_at: "2023-08-18T09:15:30Z",
+    createdAt: "2023-08-18T09:15:30Z",
   },
   {
     id: "ac8efab9-1f7d-42fe-9a19-0ffce87c3eeb",
     email: "user3@example.com",
-    full_name: "Michael Johnson",
+    fullName: "Michael Johnson",
     role: "Event Organizer",
     status: "rejected",
-    created_at: "2023-08-17T16:45:00Z",
+    createdAt: "2023-08-17T16:45:00Z",
   },
   {
     id: "6a2c9e4d-3801-4f8c-8e6d-81f7836c9b00",
     email: "user1@example.com",
-    full_name: "John Doe",
+    fullName: "John Doe",
     role: "Customer",
     status: "verified",
-    created_at: "2023-08-19T10:15:30Z",
+    createdAt: "2023-08-19T10:15:30Z",
   },
   {
     id: "e5d7ab8c-84e2-432d-b3ab-0aebac9801f9",
     email: "user2@example.com",
-    full_name: "Jane Smith",
+    fullName: "Jane Smith",
     role: "Admin",
     status: "pending",
-    created_at: "2023-08-18T15:45:00Z",
+    createdAt: "2023-08-18T15:45:00Z",
   },
   {
     id: "319c0aa5-4373-42c5-9a07-9011c8c907b3",
     email: "user3@example.com",
-    full_name: "Michael Johnson",
+    fullName: "Michael Johnson",
     role: "Event Organizer",
     status: "rejected",
-    created_at: "2023-08-17T08:30:15Z",
+    createdAt: "2023-08-17T08:30:15Z",
   },
   {
     id: "8f764e26-7d27-4f18-8e25-6b3b0ab86b01",
     email: "user1@example.com",
-    full_name: "John Doe",
+    fullName: "John Doe",
     role: "Customer",
     status: "verified",
-    created_at: "2023-08-19T10:15:30Z",
+    createdAt: "2023-08-19T10:15:30Z",
   },
   {
     id: "e1c20b1c-aa5d-4e91-88c6-9241ee82972c",
     email: "user2@example.com",
-    full_name: "Jane Smith",
+    fullName: "Jane Smith",
     role: "Admin",
     status: "pending",
-    created_at: "2023-08-18T15:45:00Z",
+    createdAt: "2023-08-18T15:45:00Z",
   },
   {
     id: "09ac25a6-981e-44c9-98f3-cccd0d5e7d1e",
     email: "user3@example.com",
-    full_name: "Michael Johnson",
+    fullName: "Michael Johnson",
     role: "Event Organizer",
     status: "rejected",
-    created_at: "2023-08-17T08:30:15Z",
+    createdAt: "2023-08-17T08:30:15Z",
   },
 ];
 
@@ -108,7 +108,7 @@ const columns: ColumnDef<RegisteredUsers>[] = [
     ),
   },
   {
-    accessorKey: "full_name",
+    accessorKey: "fullName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Full Name" />
     ),
@@ -141,7 +141,7 @@ const columns: ColumnDef<RegisteredUsers>[] = [
     },
   },
   {
-    accessorKey: "created_at",
+    accessorKey: "createdAt",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Created at" />
     ),
@@ -199,7 +199,7 @@ const facetedFilters: FacetedFilter[] = [
 ];
 
 const inputFilter: InputFilter = {
-  columnId: "full_name",
+  columnId: "fullName",
   placeholder: "Search by Full Name...",
 };
 
