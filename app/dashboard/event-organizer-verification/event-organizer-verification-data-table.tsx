@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { getFormattedDate } from "@/lib/utils";
 import { InputFilter } from "@/types/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table";
@@ -405,11 +406,8 @@ const EventOrganizerVerificationDataTable = () => {
       },
       cell: ({ row }) => {
         const date = new Date(row.original.createdAt);
-        const day = String(date.getDate()).padStart(2, "0");
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const year = String(date.getFullYear());
 
-        return <span>{`${day}-${month}-${year}`}</span>;
+        return <span>{getFormattedDate(date)}</span>;
       },
     },
     {

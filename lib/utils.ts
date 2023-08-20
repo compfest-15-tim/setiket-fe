@@ -16,13 +16,12 @@ export const getCurrencyIDR = (amount: number) => {
   return formatter.format(amount);
 };
 
-export const formatDate = (row: Row<RegisteredUsers>) => {
-  const date = new Date(row.original.created_at);
+export const getFormattedDate = (date: Date) => {
   const day = String(date.getDate()).padStart(2, "0");
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const year = String(date.getFullYear());
 
-  return { day, month, year };
+  return `${day}-${month}-${year}`;
 };
 
 export const getTimePassed = (date: Date) => {
