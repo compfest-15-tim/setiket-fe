@@ -449,6 +449,7 @@ const EditEventForm = () => {
             {/* Cancel Button */}
             <Button
               variant="secondary"
+              type="button"
               className="flex w-full flex-row items-center gap-2"
               size="lg"
               disabled={form.formState.isSubmitting}
@@ -466,7 +467,7 @@ const EditEventForm = () => {
               className="flex w-full flex-row items-center gap-2"
               size="lg"
               type="submit"
-              disabled={form.formState.isSubmitting}
+              disabled={form.formState.isSubmitting || !form.formState.isDirty}
             >
               {form.formState.isSubmitting && (
                 <Loader2 className="h-4 w-4 animate-spin" />

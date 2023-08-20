@@ -322,6 +322,7 @@ const CreateEventForm = () => {
             <Link href="/dashboard/my-events/" className="w-full">
               <Button
                 variant="secondary"
+                type="button"
                 className="flex w-full flex-row items-center gap-2"
                 size="lg"
                 disabled={form.formState.isSubmitting}
