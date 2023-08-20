@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,7 +17,7 @@ import {
 export default function TopUpForm() {
   // Form Schema Validation
   const formSchema = z.object({
-    balance: z.string()
+    balance: z.string(),
   });
 
   // Form Hook
