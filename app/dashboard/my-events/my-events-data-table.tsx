@@ -257,7 +257,7 @@ const columns: ColumnDef<Event>[] = [
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
-  },
+  },  
 ];
 
 // Input filter definition (zero or one input search only)
