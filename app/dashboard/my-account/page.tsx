@@ -27,7 +27,7 @@ export default function Dashboad() {
       <CardHeader>
         <CardTitle className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
           My Account
-          <div className="flex flex-row gap-2">
+          <div className="flex flex-row gap-4">
             <Popover>
               <PopoverTrigger>
                 <Button variant="default" type="button">

@@ -1,33 +1,35 @@
 "use client";
 
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Separator } from "@/components/ui/separator";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Link from "next/link";
-import { Separator } from "@/components/ui/separator";
 import {
   LogOut,
   Ban,
   User,
   ShoppingCart,
-  PartyPopper,
+  CheckCircle,
   Users,
+  CalendarDays,
+  CalendarCheck,
+  UserCheck,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
-
+  const isVerified = true; // from session data
   const customerMenus = [
     {
-      name: "My Order",
-      url: "/dashboard/my-order",
+      name: "My Orders",
+      url: "/dashboard/my-orders",
       icon: <ShoppingCart />,
     },
   ];
@@ -36,96 +38,97 @@ export default function DashboardSidebar() {
     {
       name: "My Events",
       url: "/dashboard/my-events",
-      icon: <PartyPopper />,
+      icon: <CalendarDays />,
     },
   ];
 
   const adminMenus = [
     {
-      name: "Event Organizers",
-      url: "/dashboard/event-organizers",
-      icon: <Users />,
+      name: "Organizer Verification",
+      url: "/dashboard/event-organizer-verification",
+      icon: <UserCheck />,
     },
     {
-      name: "Events",
-      url: "/dashboard/events",
-      icon: <PartyPopper />,
+      name: "Event Verification",
+      url: "/dashboard/event-verification",
+      icon: <CalendarCheck />,
+    },
+    {
+      name: "Registered Users",
+      url: "/dashboard/registered-users",
+      icon: <Users />,
     },
   ];
 
+  const allMenuForEasyTesting = [
+    ...customerMenus,
+    ...eventOrganizerMenus,
+    ...adminMenus,
+  ];
+
   return (
-    <Card className="h-[5%] w-full lg:max-w-xs">
-      <CardHeader>
-        <CardTitle>Henry Salim</CardTitle>
-        <CardDescription>
-          <span
-            className={cn(
-              "mt-2 flex items-center gap-2 font-semibold text-red-500"
-            )}
+    <aside className="w-full lg:max-w-xs">
+      <Card>
+        <CardHeader className="flex flex-col gap-2">
+          <CardTitle>Henry Salim</CardTitle>
+          <CardDescription
+            className={`flex items-center gap-2 font-semibold ${
+              isVerified ? "text-green-500" : "text-red-500"
+            }`}
           >
-            <Ban />
-            Not Verified Yet
-          </span>
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {/* Print out user's role */}
-        <ul className="mb-4">
-          <li className="text-sm uppercase text-gray-400">Customer</li>
-        </ul>
+            {isVerified ? <CheckCircle /> : <Ban />}
+            {isVerified ? "Verified" : "Not verified"}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4">
+          {/* Print out user's role */}
+          <p className="text-sm uppercase text-gray-400">Customer</p>
 
-        {/* User's menu */}
-        <ul>
-          <li className="mb-3">
-            <Link
-              href="/dashboard/my-account"
-              className={cn(
-                "flex w-full items-center gap-3 rounded-md p-3 duration-300 ease-in-out hover:bg-gray-200 hover:text-primary",
-                pathname == "/dashboard/my-account"
-                  ? "bg-gray-200 font-semibold text-primary"
-                  : ""
-              )}
-            >
-              <User />
-              My Account
-            </Link>
-          </li>
-
-          {/* User's menus based on users' role */}
-          {customerMenus.map((path, index) => (
-            <li key={index} className="mb-3">
+          {/* User's menu */}
+          <ul className="flex flex-col gap-3">
+            <li>
               <Link
+                href="/dashboard/my-account"
                 className={cn(
                   "flex w-full items-center gap-3 rounded-md p-3 duration-300 ease-in-out hover:bg-gray-200 hover:text-primary",
-                  pathname.startsWith(path.url)
-                    ? "bg-gray-200 font-semibold text-primary"
-                    : ""
+                  pathname === "/dashboard/my-account" &&
+                    "bg-gray-200 font-semibold text-primary"
                 )}
-                href={path.url}
               >
-                {path.icon}
-                {path.name}
+                <User />
+                My Account
               </Link>
             </li>
-          ))}
-        </ul>
-      </CardContent>
-      <Separator />
 
-      {/* User's logout button */}
-      <CardFooter>
-        <ul>
-          <li className="mt-3">
-            <Link
-              href=""
-              className="flex w-full flex-row items-center gap-2 rounded-md p-3 text-destructive duration-300 ease-in-out hover:bg-gray-200"
+            {/* User's menus based on users' role */}
+            {allMenuForEasyTesting.map((path, index) => (
+              <li key={index}>
+                <Link
+                  href={path.url}
+                  className={cn(
+                    "flex w-full items-center gap-3 rounded-md p-3 duration-300 ease-in-out hover:bg-gray-200 hover:text-primary",
+                    pathname.startsWith(path.url) &&
+                      "bg-gray-200 font-semibold text-primary"
+                  )}
+                >
+                  {path.icon}
+                  {path.name}
+                </Link>
+              </li>
+            ))}
+
+            <Separator />
+
+            <li
+              className="flex w-full cursor-pointer flex-row items-center gap-2 rounded-md p-3 text-destructive duration-300 ease-in-out hover:bg-gray-200"
+              onClick={() => {}}
             >
-              <LogOut className="stroke-destructive" size={20} />
+              <LogOut className="mr-2 stroke-destructive" />
               Logout
-            </Link>
-          </li>
-        </ul>
-      </CardFooter>
-    </Card>
+            </li>
+          </ul>
+        </CardContent>
+      </Card>
+    </aside>
   );
 }

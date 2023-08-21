@@ -1,7 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Row } from "@tanstack/table-core";
-import { RegisteredUsers } from "@/app/dashboard/registered-users/registered-users-table";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -16,13 +14,17 @@ export const getCurrencyIDR = (amount: number) => {
   return formatter.format(amount);
 };
 
-export const formatDate = (row: Row<RegisteredUsers>) => {
-  const date = new Date(row.original.created_at);
+export const getFormattedDate = (date: Date) => {
   const day = String(date.getDate()).padStart(2, "0");
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const year = String(date.getFullYear());
+  const hour = date.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
 
-  return { day, month, year };
+  return `${day}/${month}/${year} ${hour}`;
 };
 
 export const getTimePassed = (date: Date) => {

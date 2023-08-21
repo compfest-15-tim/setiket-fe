@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -36,6 +37,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         />
         {children}
         <Footer />
+        <Toaster />
       </body>
     </html>
   );

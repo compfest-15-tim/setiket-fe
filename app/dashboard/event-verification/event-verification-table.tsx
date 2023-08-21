@@ -1,23 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { getFormattedDate } from "@/lib/utils";
+import { InputFilter } from "@/types/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table";
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
+import { Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { InputFilter, FacetedFilter } from "@/types/data-table";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  Trash2,
-  FileEdit,
-  CheckCircle2,
-  Clock,
-  XCircle,
-  BarChart4,
-} from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,6 +21,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { revalidatePath } from "next/cache";
 
 export interface Event {
   id: string;
@@ -39,13 +32,15 @@ export interface Event {
   status: "verified" | "pending" | "rejected";
 }
 
-const MyEventsTable = () => {
-  // Loading state (deletetion)
+const EventVerificationDataTable = () => {
+  // Loading state
   const [isLoading, setIsLoading] = useState(false);
 
-  // Toast
+  // Toast hook
   const { toast } = useToast();
 
+  // Test Data
+  // Get all event organizer pending data from API
   // Test Data
   const events: Event[] = [
     {
@@ -54,7 +49,7 @@ const MyEventsTable = () => {
       date: "2023-09-15T00:00:00Z",
       location: "San Francisco, USA",
       capacity: "1000/1200",
-      status: "verified",
+      status: "pending",
     },
     {
       id: "f742e8e2-1fb7-4e8c-87d0-6720e4c2c981",
@@ -62,7 +57,7 @@ const MyEventsTable = () => {
       date: "2023-08-25T00:00:00Z",
       location: "Miami, USA",
       capacity: "50000/55000",
-      status: "verified",
+      status: "pending",
     },
     {
       id: "c501a615-3b31-44e6-b539-49f18c81ed65",
@@ -78,7 +73,7 @@ const MyEventsTable = () => {
       date: "2023-09-30T00:00:00Z",
       location: "Bangalore, India",
       capacity: "300/300",
-      status: "rejected",
+      status: "pending",
     },
     {
       id: "d28f32d0-84d2-4f5e-9ab3-51793df46cf3",
@@ -86,7 +81,7 @@ const MyEventsTable = () => {
       date: "2023-10-12T00:00:00Z",
       location: "Tokyo, Japan",
       capacity: "800/1000",
-      status: "verified",
+      status: "pending",
     },
     {
       id: "59aa525a-c0e5-47b0-8cc0-c6c7e5c242a7",
@@ -102,7 +97,7 @@ const MyEventsTable = () => {
       date: "2023-09-22T00:00:00Z",
       location: "London, UK",
       capacity: "300/350",
-      status: "verified",
+      status: "pending",
     },
     {
       id: "b24a67e6-1523-48eb-89d3-03f9a741f774",
@@ -118,7 +113,7 @@ const MyEventsTable = () => {
       date: "2023-09-10T00:00:00Z",
       location: "Bali, Indonesia",
       capacity: "20/25",
-      status: "verified",
+      status: "pending",
     },
     {
       id: "db786f08-7cd0-4e51-b4b9-ee64a2d0e51e",
@@ -126,7 +121,7 @@ const MyEventsTable = () => {
       date: "2023-10-08T00:00:00Z",
       location: "New York City, USA",
       capacity: "500/600",
-      status: "verified",
+      status: "pending",
     },
     {
       id: "7314be9e-81b4-4eb3-90f3-94e5d20cfb36",
@@ -142,7 +137,7 @@ const MyEventsTable = () => {
       date: "2023-10-15T00:00:00Z",
       location: "Rome, Italy",
       capacity: "30/30",
-      status: "verified",
+      status: "pending",
     },
     {
       id: "612c86b3-e2f9-4f95-9ca3-831c8c80e4a4",
@@ -150,7 +145,7 @@ const MyEventsTable = () => {
       date: "2023-09-05T00:00:00Z",
       location: "Vancouver, Canada",
       capacity: "200/250",
-      status: "verified",
+      status: "pending",
     },
     {
       id: "f7b484e9-10e7-45d5-9e49-aa2d961c99c5",
@@ -166,7 +161,7 @@ const MyEventsTable = () => {
       date: "2023-09-12T00:00:00Z",
       location: "Florence, Italy",
       capacity: "15/20",
-      status: "verified",
+      status: "pending",
     },
     {
       id: "d8e1b1ae-6743-4d13-9b34-c0daab7eb0e7",
@@ -174,7 +169,7 @@ const MyEventsTable = () => {
       date: "2023-09-08T00:00:00Z",
       location: "Austin, USA",
       capacity: "800/1000",
-      status: "verified",
+      status: "pending",
     },
     {
       id: "f098e0b7-5b12-47d0-8d50-1e1b4fcbf2ac",
@@ -182,7 +177,7 @@ const MyEventsTable = () => {
       date: "2023-10-20T00:00:00Z",
       location: "Zurich, Switzerland",
       capacity: "50/50",
-      status: "rejected",
+      status: "pending",
     },
   ];
 
@@ -233,16 +228,18 @@ const MyEventsTable = () => {
 
         return <Badge variant={variant}>{status}</Badge>;
       },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
-      },
     },
     {
-      id: "actions",
+      id: "verification",
       cell: ({ row }) => {
+        // Get id
         const id = row.original.id;
 
-        const onDelete = async () => {
+        const onClick = async (action: "reject" | "verify") => {
+          // Create form data
+          const formData = new FormData();
+          formData.append("status", action);
+
           // Intialize loading state
           setIsLoading(true);
           toast({
@@ -283,7 +280,9 @@ const MyEventsTable = () => {
           toast({
             variant: "success",
             title: "Success",
-            description: "Event has been deleted.",
+            description: `Event verification has been ${
+              action === "verify" ? "verified" : "rejected"
+            }.`,
           });
 
           // Revalidate page data
@@ -292,48 +291,52 @@ const MyEventsTable = () => {
 
         return (
           <div className="flex flex-row gap-4">
-            {/* Stats */}
-            <Link
-              href={`/dashboard/my-events/${id}/`}
-              className={
-                isLoading ? "pointer-events-none" : "pointer-events-auto"
-              }
-            >
-              <Button variant="outline" size="icon" disabled={isLoading}>
-                <BarChart4 className="h-5 w-5 stroke-foreground" />
-              </Button>
-            </Link>
-
-            {/* Edit */}
-            <Link
-              href={`/dashboard/my-events/${id}/edit`}
-              className={
-                isLoading ? "pointer-events-none" : "pointer-events-auto"
-              }
-            >
-              <Button variant="outline" size="icon" disabled={isLoading}>
-                <FileEdit className="h-5 w-5 stroke-foreground" />
-              </Button>
-            </Link>
-
-            {/* Delete */}
+            {/* Reject Button & Alert Confirmation */}
             <AlertDialog>
-              <AlertDialogTrigger asChild disabled={isLoading}>
-                <Button variant="destructive" size="icon" disabled={isLoading}>
-                  <Trash2 className="h-5 w-5 stroke-destructive-foreground" />
+              <AlertDialogTrigger disabled={isLoading}>
+                <Button size="icon" variant="destructive" disabled={isLoading}>
+                  <X className="h-6 w-6" />
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    your event data from our servers.
+                    This action cannot be undone. This will reject the event
+                    organizer verification.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={onDelete}>
+                  <AlertDialogAction onClick={() => onClick("reject")}>
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
+            {/* Verify button & Alert Confirmation */}
+            <AlertDialog>
+              <AlertDialogTrigger disabled={isLoading}>
+                <Button
+                  size="icon"
+                  className="bg-green-500 xl:hover:bg-green-500/80"
+                  disabled={isLoading}
+                >
+                  <Check className="h-6 w-6" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will verify the event
+                    organizer.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => onClick("verify")}>
                     Continue
                   </AlertDialogAction>
                 </AlertDialogFooter>
@@ -351,39 +354,9 @@ const MyEventsTable = () => {
     placeholder: "Filter by title...",
   };
 
-  // Faceted filter(s) definition (zero or more faceted filter(s))
-  const facetedFilters: FacetedFilter[] = [
-    {
-      columnId: "status",
-      title: "Status",
-      options: [
-        {
-          value: "verified",
-          label: "verified",
-          icon: CheckCircle2,
-        },
-        {
-          value: "pending",
-          label: "pending",
-          icon: Clock,
-        },
-        {
-          value: "rejected",
-          label: "rejected",
-          icon: XCircle,
-        },
-      ],
-    },
-  ];
-
   return (
-    <DataTable
-      columns={columns}
-      data={events}
-      inputFilter={inputFilter}
-      facetedFilters={facetedFilters}
-    />
+    <DataTable columns={columns} data={events} inputFilter={inputFilter} />
   );
 };
 
-export default MyEventsTable;
+export default EventVerificationDataTable;

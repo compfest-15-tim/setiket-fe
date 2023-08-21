@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Form,
   FormControl,
@@ -17,6 +18,9 @@ import {
 } from "@/components/ui/form";
 
 const SignInForm = () => {
+  // Toast hook
+  const { toast } = useToast();
+
   // Form Schema Validation
   const formSchema = z.object({
     email: z.string().email(),
@@ -30,8 +34,46 @@ const SignInForm = () => {
 
   // Form Submit Handler (After validated with zod)
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-    // await fetch("https://random-data-api.com/api/users/random_user");
+    // Intialize loading state
+    toast({
+      variant: "default",
+      title: "Loading",
+      description: "Please wait...",
+      duration: Infinity,
+    });
+
+    // Try catch to handle network error from fetch()
+    try {
+      console.log(values);
+      const res = await fetch(
+        "https://random-data-api.com/api/users/random_user"
+      );
+      await fetch("https://random-data-api.com/api/users/random_user");
+      await fetch("https://random-data-api.com/api/users/random_user");
+      await fetch("https://random-data-api.com/api/users/random_user");
+      const resJSON = await res.json();
+
+      // API error, Throw error message
+      if (!res.ok) {
+        throw new Error(resJSON.message);
+      }
+    } catch (e) {
+      // Error
+      const error = e as Error;
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message,
+      });
+      return;
+    }
+
+    // Success
+    toast({
+      variant: "success",
+      title: "Success",
+      description: "Sign in success, welcome!",
+    });
   };
 
   return (
