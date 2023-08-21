@@ -1,7 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Row } from "@tanstack/table-core";
-import { RegisteredUsers } from "@/app/dashboard/registered-users/registered-users-table";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

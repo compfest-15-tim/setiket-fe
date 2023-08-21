@@ -1,22 +1,34 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { getFormattedDate } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table";
 import { Badge } from "@/components/ui/badge";
-import { BarChart4, MoreHorizontal } from "lucide-react";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import { Trash2, FileEdit, CheckCircle2, Clock, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { InputFilter, FacetedFilter } from "@/types/data-table";
+import { useToast } from "@/components/ui/use-toast";
+import {
+  Trash2,
+  FileEdit,
+  CheckCircle2,
+  Clock,
+  XCircle,
+  BarChart4,
+} from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export interface Event {
   id: string;
@@ -28,6 +40,12 @@ export interface Event {
 }
 
 const MyEventsTable = () => {
+  // Loading state (deletetion)
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Toast
+  const { toast } = useToast();
+
   // Test Data
   const events: Event[] = [
     {
@@ -181,42 +199,6 @@ const MyEventsTable = () => {
       },
     },
     {
-      id: "actions",
-      cell: ({ row }) => {
-        const id = row.original.id;
-
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <Link href={`/dashboard/my-events/${id}`}>
-                <DropdownMenuItem>
-                  <BarChart4 className="mr-2 h-4 w-4 stroke-popover-foreground" />
-                  View Detail
-                </DropdownMenuItem>
-              </Link>
-              <Link href={`/dashboard/my-events/${id}/edit`}>
-                <DropdownMenuItem>
-                  <FileEdit className="mr-2 h-4 w-4 stroke-popover-foreground" />
-                  Edit
-                </DropdownMenuItem>
-              </Link>
-              <DropdownMenuItem className="text-destructive focus:text-destructive">
-                <Trash2 className="mr-2 h-4 w-4 stroke-destructive" />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
-    },
-    {
       accessorKey: "date",
       header: ({ column }) => {
         return <DataTableColumnHeader column={column} title="Date" />;
@@ -227,7 +209,6 @@ const MyEventsTable = () => {
         return <span>{getFormattedDate(date)}</span>;
       },
     },
-
     {
       accessorKey: "location",
       header: ({ column }) => {
@@ -254,6 +235,110 @@ const MyEventsTable = () => {
       },
       filterFn: (row, id, value) => {
         return value.includes(row.getValue(id));
+      },
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => {
+        const id = row.original.id;
+
+        const onDelete = async () => {
+          // Intialize loading state
+          setIsLoading(true);
+          toast({
+            variant: "default",
+            title: "Loading",
+            description: "Please wait...",
+          });
+
+          // Try catch to handle network error from fetch()
+          try {
+            const res = await fetch(
+              "https://random-data-api.com/api/users/random_user"
+            );
+            await fetch("https://random-data-api.com/api/users/random_user");
+            await fetch("https://random-data-api.com/api/users/random_user");
+            await fetch("https://random-data-api.com/api/users/random_user");
+            const resJSON = await res.json();
+
+            // API error, Throw error message
+            if (!res.ok) {
+              throw new Error(resJSON.message);
+            }
+          } catch (error) {
+            // Error
+            setIsLoading(false);
+            toast({
+              variant: "destructive",
+              title: "Error",
+              description: error as string,
+            });
+            return;
+          }
+
+          // Success
+          setIsLoading(false);
+          toast({
+            variant: "success",
+            title: "Success",
+            description: "Event organizer verification has been rejected.",
+          });
+
+          // Revalidate page data
+          // revalidatePath("/dashboard/event-organizer-verification");
+        };
+
+        return (
+          <div className="flex flex-row gap-3">
+            {/* Stats */}
+            <Link
+              href={`/dashboard/my-events/${id}/`}
+              className={
+                isLoading ? "pointer-events-none" : "pointer-events-auto"
+              }
+            >
+              <Button variant="outline" size="icon" disabled={isLoading}>
+                <BarChart4 className="h-5 w-5 stroke-foreground" />
+              </Button>
+            </Link>
+
+            {/* Edit */}
+            <Link
+              href={`/dashboard/my-events/${id}/edit`}
+              className={
+                isLoading ? "pointer-events-none" : "pointer-events-auto"
+              }
+            >
+              <Button variant="outline" size="icon" disabled={isLoading}>
+                <FileEdit className="h-5 w-5 stroke-foreground" />
+              </Button>
+            </Link>
+
+            {/* Delete */}
+            <AlertDialog>
+              <AlertDialogTrigger asChild disabled={isLoading}>
+                <Button variant="destructive" size="icon" disabled={isLoading}>
+                  <Trash2 className="h-5 w-5 stroke-destructive-foreground" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your event data from our servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={onDelete}>
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+        );
       },
     },
   ];
