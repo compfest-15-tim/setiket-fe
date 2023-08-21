@@ -249,6 +249,7 @@ const MyEventsTable = () => {
             variant: "default",
             title: "Loading",
             description: "Please wait...",
+            duration: Infinity,
           });
 
           // Try catch to handle network error from fetch()
@@ -265,13 +266,14 @@ const MyEventsTable = () => {
             if (!res.ok) {
               throw new Error(resJSON.message);
             }
-          } catch (error) {
+          } catch (e) {
             // Error
+            const error = e as Error;
             setIsLoading(false);
             toast({
               variant: "destructive",
               title: "Error",
-              description: error as string,
+              description: error.message,
             });
             return;
           }
@@ -281,7 +283,7 @@ const MyEventsTable = () => {
           toast({
             variant: "success",
             title: "Success",
-            description: "Event organizer verification has been rejected.",
+            description: "Event has been deleted.",
           });
 
           // Revalidate page data

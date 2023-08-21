@@ -427,6 +427,7 @@ const EventOrganizerVerificationDataTable = () => {
             variant: "default",
             title: "Loading",
             description: "Please wait...",
+            duration: Infinity,
           });
 
           // Try catch to handle network error from fetch()
@@ -434,19 +435,22 @@ const EventOrganizerVerificationDataTable = () => {
             const res = await fetch(
               "https://random-data-api.com/api/users/random_user"
             );
+            await fetch("https://random-data-api.com/api/users/random_user");
+            await fetch("https://random-data-api.com/api/users/random_user");
+            await fetch("https://random-data-api.com/api/users/random_user");
             const resJSON = await res.json();
 
             // API error, Throw error message
             if (!res.ok) {
               throw new Error(resJSON.message);
             }
-          } catch (error) {
+          } catch (e) {
             // Error
-            setIsLoading(false);
+            const error = e as Error;
             toast({
               variant: "destructive",
               title: "Error",
-              description: error as string,
+              description: error.message,
             });
             return;
           }
@@ -456,7 +460,9 @@ const EventOrganizerVerificationDataTable = () => {
           toast({
             variant: "success",
             title: "Success",
-            description: "Event organizer verification has been rejected.",
+            description: `Event verification has been ${
+              action === "verify" ? "verified" : "rejected"
+            }.`,
           });
 
           // Revalidate page data
@@ -464,17 +470,12 @@ const EventOrganizerVerificationDataTable = () => {
         };
 
         return (
-          <div className="flex flex-row gap-3">
+          <div className="flex flex-row gap-4">
             {/* Reject Button & Alert Confirmation */}
             <AlertDialog>
               <AlertDialogTrigger disabled={isLoading}>
-                <Button
-                  size="icon"
-                  variant="destructive"
-                  className="h-8 w-8"
-                  disabled={isLoading}
-                >
-                  <X className="h-5 w-5" />
+                <Button size="icon" variant="destructive" disabled={isLoading}>
+                  <X className="h-6 w-6" />
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
@@ -499,10 +500,10 @@ const EventOrganizerVerificationDataTable = () => {
               <AlertDialogTrigger disabled={isLoading}>
                 <Button
                   size="icon"
-                  className="h-8 w-8 bg-green-500 xl:hover:bg-green-500/80"
+                  className="bg-green-500 xl:hover:bg-green-500/80"
                   disabled={isLoading}
                 >
-                  <Check className="h-5 w-5" />
+                  <Check className="h-6 w-6" />
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>

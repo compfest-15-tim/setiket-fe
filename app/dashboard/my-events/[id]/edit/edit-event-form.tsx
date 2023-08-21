@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import * as z from "zod";
 import { cn } from "@/lib/utils";
@@ -12,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Popover,
   PopoverContent,
@@ -25,10 +25,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import Link from "next/link";
 
 const EditEventForm = () => {
-  // Initialize router
-  const router = useRouter();
+  // Toast hook
+  const { toast } = useToast();
 
   // Fetch data
   // Get current value (se as form default value)
@@ -135,13 +136,49 @@ const EditEventForm = () => {
 
   // Form Submit Handler (After validated with zod)
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-    await fetch("https://random-data-api.com/api/users/random_user");
-    // await fetch("https://random-data-api.com/api/users/random_user");
-    // await fetch("https://random-data-api.com/api/users/random_user");
-    // await fetch("https://random-data-api.com/api/users/random_user");
-    // await fetch("https://random-data-api.com/api/users/random_user");
-    // await fetch("https://random-data-api.com/api/users/random_user");
+    // Intialize loading state
+    toast({
+      variant: "default",
+      title: "Loading",
+      description: "Please wait...",
+      duration: Infinity,
+    });
+
+    // Try catch to handle network error from fetch()
+    try {
+      console.log(values);
+      const res = await fetch(
+        "https://random-data-api.com/api/users/random_user"
+      );
+      await fetch("https://random-data-api.com/api/users/random_user");
+      await fetch("https://random-data-api.com/api/users/random_user");
+      await fetch("https://random-data-api.com/api/users/random_user");
+      const resJSON = await res.json();
+
+      // API error, Throw error message
+      if (!res.ok) {
+        throw new Error(resJSON.message);
+      }
+    } catch (e) {
+      // Error
+      const error = e as Error;
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message,
+      });
+      return;
+    }
+
+    // Success
+    toast({
+      variant: "success",
+      title: "Success",
+      description: "Event has been edited.",
+    });
+
+    // Revalidate page data
+    // revalidatePath("/dashboard/event-organizer-verification");
   };
 
   return (
@@ -447,19 +484,27 @@ const EditEventForm = () => {
 
           <div className="flex flex-col gap-5 sm:flex-row">
             {/* Cancel Button */}
-            <Button
-              variant="secondary"
-              type="button"
-              className="flex w-full flex-row items-center gap-2"
-              size="lg"
-              disabled={form.formState.isSubmitting}
-              onClick={() => router.push("/dashboard/my-events")}
+            <Link
+              href="/dashboard/my-events"
+              className={`w-full ${
+                form.formState.isSubmitting
+                  ? "pointer-events-none"
+                  : "pointer-events-auto"
+              }`}
             >
-              {form.formState.isSubmitting && (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              )}
-              Cancel
-            </Button>
+              <Button
+                variant="secondary"
+                type="button"
+                className="flex w-full flex-row items-center gap-2"
+                size="lg"
+                disabled={form.formState.isSubmitting}
+              >
+                {form.formState.isSubmitting && (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                )}
+                Cancel
+              </Button>
+            </Link>
 
             {/* Submit Button */}
             <Button

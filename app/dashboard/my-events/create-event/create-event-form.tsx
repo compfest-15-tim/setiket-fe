@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import * as z from "zod";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Popover,
   PopoverContent,
@@ -24,9 +26,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import Image from "next/image";
 
 const CreateEventForm = () => {
+  // Toast hook
+  const { toast } = useToast();
+
   // Images
   const MAX_IMAGE_SIZE = 5242880; // 5 MB
   const ALLOWED_IMAGE_TYPES = [
@@ -69,8 +73,50 @@ const CreateEventForm = () => {
 
   // Form Submit Handler (After validated with zod)
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-    // await fetch("https://random-data-api.com/api/users/random_user");
+    // Intialize loading state
+    toast({
+      variant: "default",
+      title: "Loading",
+      description: "Please wait...",
+      duration: Infinity,
+    });
+
+    // Try catch to handle network error from fetch()
+    try {
+      console.log(values);
+      const res = await fetch(
+        "https://random-data-api.com/api/users/random_user"
+      );
+      await fetch("https://random-data-api.com/api/users/random_user");
+      await fetch("https://random-data-api.com/api/users/random_user");
+      await fetch("https://random-data-api.com/api/users/random_user");
+      const resJSON = await res.json();
+
+      // API error, Throw error message
+      if (!res.ok) {
+        throw new Error(resJSON.message);
+      }
+    } catch (e) {
+      // Error
+      const error = e as Error;
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message,
+      });
+      return;
+    }
+
+    // Success
+    toast({
+      variant: "success",
+      title: "Success",
+      description:
+        "Event proposal has been registered, please wait for verification.",
+    });
+
+    // Revalidate page data
+    // revalidatePath("/dashboard/event-organizer-verification");
   };
 
   return (
@@ -319,7 +365,14 @@ const CreateEventForm = () => {
 
           <div className="flex flex-col gap-5 sm:flex-row">
             {/* Cancel Button */}
-            <Link href="/dashboard/my-events/" className="w-full">
+            <Link
+              href="/dashboard/my-events"
+              className={`w-full ${
+                form.formState.isSubmitting
+                  ? "pointer-events-none"
+                  : "pointer-events-auto"
+              }`}
+            >
               <Button
                 variant="secondary"
                 type="button"
