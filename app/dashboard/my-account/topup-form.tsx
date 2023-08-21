@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 import {
   Form,
   FormControl,
@@ -13,11 +15,18 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { revalidatePath } from "next/cache";
 
 export default function TopUpForm() {
+  // Toast hook
+  const { toast } = useToast();
+
+  // Router hook
+  const router = useRouter();
+
   // Form Schema Validation
   const formSchema = z.object({
-    balance: z.string(),
+    amount: z.coerce.number({ invalid_type_error: "Required" }).gt(0),
   });
 
   // Form Hook
@@ -27,8 +36,47 @@ export default function TopUpForm() {
 
   // Form Submit Handler (After validated with zod)
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-    // await fetch("https://random-data-api.com/api/users/random_user");
+    // Intialize loading state
+    toast({
+      variant: "default",
+      title: "Loading",
+      description: "Please wait...",
+      duration: Infinity,
+    });
+
+    // Try catch to handle network error from fetch()
+    try {
+      console.log(values);
+      const res = await fetch(
+        "https://random-data-api.com/api/users/random_user"
+      );
+      await fetch("https://random-data-api.com/api/users/random_user");
+      await fetch("https://random-data-api.com/api/users/random_user");
+      await fetch("https://random-data-api.com/api/users/random_user");
+      const resJSON = await res.json();
+
+      // API error, Throw error message
+      if (!res.ok) {
+        throw new Error(resJSON.message);
+      }
+    } catch (e) {
+      // Error
+      const error = e as Error;
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message,
+      });
+      return;
+    }
+
+    // Success
+    toast({
+      variant: "success",
+      title: "Success",
+      description: "Top up success!.",
+    });
+    router.refresh();
   };
 
   return (
@@ -40,13 +88,13 @@ export default function TopUpForm() {
         {/* balance */}
         <FormField
           control={form.control}
-          name="balance"
+          name="amount"
           render={({ field }) => (
             <FormItem>
               <FormControl>
                 <Input
                   type="number"
-                  placeholder="How many?"
+                  placeholder="How much?"
                   disabled={form.formState.isSubmitting}
                   {...field}
                 />
@@ -55,6 +103,7 @@ export default function TopUpForm() {
             </FormItem>
           )}
         />
+
         {/* Submit Button */}
         <Button
           variant="default"
@@ -63,7 +112,7 @@ export default function TopUpForm() {
           disabled={form.formState.isSubmitting}
         >
           {form.formState.isSubmitting && (
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           )}
           Top up
         </Button>
