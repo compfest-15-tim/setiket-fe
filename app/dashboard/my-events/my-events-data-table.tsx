@@ -291,7 +291,7 @@ const MyEventsTable = () => {
         };
 
         return (
-          <div className="flex flex-row gap-3">
+          <div className="flex flex-row gap-4">
             {/* Stats */}
             <Link
               href={`/dashboard/my-events/${id}/`}

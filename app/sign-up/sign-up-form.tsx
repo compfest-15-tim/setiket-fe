@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Select,
   SelectContent,
@@ -24,6 +26,12 @@ import {
 } from "@/components/ui/form";
 
 const SignUpForm = () => {
+  // Toast hook
+  const { toast } = useToast();
+
+  // Router hook
+  const router = useRouter();
+
   // Form Schema Validation
   const formSchema = z.object({
     email: z.string().email(),
@@ -39,8 +47,47 @@ const SignUpForm = () => {
 
   // Form Submit Handler (After validated with zod)
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-    // await fetch("https://random-data-api.com/api/users/random_user");
+    // Intialize loading state
+    toast({
+      variant: "default",
+      title: "Loading",
+      description: "Please wait...",
+      duration: Infinity,
+    });
+
+    // Try catch to handle network error from fetch()
+    try {
+      console.log(values);
+      const res = await fetch(
+        "https://random-data-api.com/api/users/random_user"
+      );
+      await fetch("https://random-data-api.com/api/users/random_user");
+      await fetch("https://random-data-api.com/api/users/random_user");
+      await fetch("https://random-data-api.com/api/users/random_user");
+      const resJSON = await res.json();
+
+      // API error, Throw error message
+      if (!res.ok) {
+        throw new Error(resJSON.message);
+      }
+    } catch (e) {
+      // Error
+      const error = e as Error;
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message,
+      });
+      return;
+    }
+
+    // Success
+    toast({
+      variant: "success",
+      title: "Success",
+      description: "Sign up success, please check your email for verification!",
+    });
+    router.push("/sign-in");
   };
 
   return (
