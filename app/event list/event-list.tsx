@@ -28,15 +28,15 @@ function formatCurrency(amount: number) {
 }
 
 function formatDate(inputDate: Date) {
-  const options = { day: 'numeric', month: 'long', year: 'numeric' } as const;
-  return new Date(inputDate).toLocaleDateString('id-ID', options);
+  const options = { day: "numeric", month: "long", year: "numeric" } as const;
+  return new Date(inputDate).toLocaleDateString("id-ID", options);
 }
 
 function getAvailability(capacity: number, isFull: boolean): string {
   if (capacity > 0 && isFull) {
-    return 'Tersedia sekarang';
+    return "Tersedia sekarang";
   } else {
-    return 'Tidak tersedia';
+    return "Tidak tersedia";
   }
 }
 
@@ -55,18 +55,16 @@ const EventList = ({
   transactions,
   redirectLink,
 }: EventListProps) => {
-
   const availability = getAvailability(capacity, true);
 
   return (
-
     <Link href={redirectLink}>
       <div
         key={id}
         className="relative inline-block cursor-pointer p-2 duration-300 ease-in-out hover:scale-105"
       >
         <img
-          className="w-64 h-32 object-cover rounded-md mb-2"
+          className="mb-2 h-32 w-64 rounded-md object-cover"
           src={image}
           alt={title}
           draggable="false"
@@ -75,8 +73,16 @@ const EventList = ({
           <h2 className="text-base font-semibold">{title}</h2>
           <p className="text-xs text-gray-500">{location}</p>
           <p className="text-xs  text-gray-500">{formatDate(date)}</p>
-          <p className="text-m mt-3 font-bold text-red-500">{formatCurrency(price)}</p>
-          <p className={`text-xs ${availability === 'Tidak tersedia' ? 'text-red-500' : 'text-green-600'}`}>
+          <p className="text-m mt-3 font-bold text-red-500">
+            {formatCurrency(price)}
+          </p>
+          <p
+            className={`text-xs ${
+              availability === "Tidak tersedia"
+                ? "text-red-500"
+                : "text-green-600"
+            }`}
+          >
             {availability}
           </p>
         </div>
