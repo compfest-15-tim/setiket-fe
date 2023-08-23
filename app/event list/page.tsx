@@ -220,11 +220,7 @@ const EventListPage = () => {
           <Input type="search" placeholder="Cari aktivitas" />
         </CardHeader>
         <CardContent>
-<<<<<<< HEAD
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-=======
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
->>>>>>> c00d1d5697d861a4c20ed8e691479c5d47a4376f
             {events.map((event) => {
               return <EventList key={event.id} {...event} />;
             })}
@@ -233,10 +229,6 @@ const EventListPage = () => {
       </Card>
     </main>
   );
-<<<<<<< HEAD
-  
-=======
->>>>>>> c00d1d5697d861a4c20ed8e691479c5d47a4376f
 };
 
 export default EventListPage;
