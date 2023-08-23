@@ -51,7 +51,11 @@
 =======
     "react-icons": "^4.10.1",
     "react-responsive-carousel": "^3.2.23",
+<<<<<<< HEAD
 >>>>>>> 96a1819 (feat: add main page)
+=======
+>>>>>>> 96a1819e65228816a4ff70ff6339b40f9acceab8
+>>>>>>> 419a4e71d1e3fc67afb05afdf30c51221aa7dc51
     "tailwind-merge": "^1.14.0",
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.6",
