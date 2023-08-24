@@ -352,7 +352,7 @@ const EventFilterAndList = () => {
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                 />
-                
+
                 {/* Find Button */}
                 <Button
                   size="icon"
