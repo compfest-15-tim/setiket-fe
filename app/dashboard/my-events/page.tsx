@@ -19,7 +19,7 @@ const MyEventsPage = async () => {
   if (session && session.user_metadata.role !== "EVENT_ORGANIZER") {
     notFound();
   }
-  
+
   return (
     <section className="w-full">
       <Card>
