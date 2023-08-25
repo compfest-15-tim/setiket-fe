@@ -75,8 +75,8 @@ export default function EventCards() {
   return (
     <>
       {events.map((e, key) => (
-        <Link href={`/events/${e.id}`}>
-          <Card className="mb-10 w-full" key={key}>
+        <Link href={`/events/${e.id}`} key={key}>
+          <Card className="mb-10 w-full">
             <CardHeader>
               <CardTitle className="h-16 text-center">{e.title}</CardTitle>
             </CardHeader>
