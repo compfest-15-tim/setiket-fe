@@ -3,11 +3,14 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { objectToFormData } from "@/lib/utils";
+import { BASE_URL } from "@/lib/constants";
 import {
   Form,
   FormControl,
@@ -18,6 +21,9 @@ import {
 } from "@/components/ui/form";
 
 const SignInForm = () => {
+  // Router
+  const router = useRouter();
+
   // Toast hook
   const { toast } = useToast();
 
@@ -34,6 +40,9 @@ const SignInForm = () => {
 
   // Form Submit Handler (After validated with zod)
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    // Get form data
+    const formData = objectToFormData(values);
+
     // Intialize loading state
     toast({
       variant: "default",
@@ -44,13 +53,11 @@ const SignInForm = () => {
 
     // Try catch to handle network error from fetch()
     try {
-      console.log(values);
-      const res = await fetch(
-        "https://random-data-api.com/api/users/random_user"
-      );
-      await fetch("https://random-data-api.com/api/users/random_user");
-      await fetch("https://random-data-api.com/api/users/random_user");
-      await fetch("https://random-data-api.com/api/users/random_user");
+      const res = await fetch(`${BASE_URL}/api/sign-in`, {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      });
       const resJSON = await res.json();
 
       // API error, Throw error message
@@ -74,6 +81,8 @@ const SignInForm = () => {
       title: "Success",
       description: "Sign in success, welcome!",
     });
+    router.refresh();
+    router.push("/");
   };
 
   return (

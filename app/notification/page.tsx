@@ -1,13 +1,20 @@
 import { type Metadata } from "next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Notification from "./notification";
+import { getServerSession } from "@/lib/auth-server";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Notification | SeTiket",
 };
 
-const NotificationPage = () => {
+const NotificationPage = async () => {
   // Protected route: Get session and check if user is authenticated
+  const session = await getServerSession();
+
+  if (!session) {
+    redirect("/sign-in");
+  }
 
   // Get all notifications from db
   const notifications = [

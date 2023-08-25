@@ -14,14 +14,28 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import WithdrawForm from "./withdraw-form";
-import { getCurrencyIDR } from "@/lib/utils";
+import { getCurrencyIDR, getFormattedDate } from "@/lib/utils";
 import { Metadata } from "next";
+import { getServerSession } from "@/lib/auth-server";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "My Account | SeTiket",
 };
 
-export default function Dashboad() {
+export default async function MyAccountPage() {
+  const session = await getServerSession();
+
+  if (!session) {
+    redirect("/sign-in");
+  }
+
+  const email = session.user_metadata.email;
+  const fullName = session.user_metadata.full_name;
+  const role = session.user_metadata.role;
+  const signedUpAt = getFormattedDate(new Date(session.confirmed_at));
+  // GET BALANCE DATA
+
   return (
     <Card className="h-[5%] w-full">
       <CardHeader>
@@ -62,11 +76,11 @@ export default function Dashboad() {
           <div>
             <div className="mb-10">
               <p className="mb-2 uppercase">Email</p>
-              <p className="font-medium text-primary">henrysalim22@gmail.com</p>
+              <p className="font-medium text-primary">{email}</p>
             </div>
             <div className="mb-10">
               <p className="mb-2 uppercase">Full Name</p>
-              <p className="font-medium text-primary">Henry Salim</p>
+              <p className="font-medium text-primary">{fullName}</p>
             </div>
           </div>
 
@@ -79,8 +93,8 @@ export default function Dashboad() {
             </div>
             <div>
               <p className="mb-2 uppercase">Registered as</p>
-              <p className="font-medium text-primary" id="current-balance">
-                Customer
+              <p className="font-medium text-primary" id="role">
+                {role}
               </p>
             </div>
           </div>
@@ -88,7 +102,7 @@ export default function Dashboad() {
       </CardContent>
       <Separator />
       <CardFooter className="p-4">
-        <small className="text-gray-400">Created at: 16 Aug 2023</small>
+        <small className="text-gray-400">{signedUpAt}</small>
       </CardFooter>
     </Card>
   );

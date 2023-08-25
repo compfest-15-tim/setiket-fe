@@ -1,12 +1,7 @@
-"use client";
-
 import "./globals.css";
 import { Inter } from "next/font/google";
-import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
-import NavBar from "@/components/navbar";
-import Footer from "@/components/footer";
-import { Toaster } from "@/components/ui/toaster";
+import Body from "@/components/body";
+import { getServerSession } from "@/lib/auth-server";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -14,31 +9,13 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
-  // Navbar State
-  const [navBarExpanded, setNavBarExpanded] = useState(false);
-
-  // Reset navbar everytime path changes
-  const pathname = usePathname();
-  useEffect(() => {
-    setNavBarExpanded(false);
-  }, [pathname]);
+const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+  // Get user session
+  const session = await getServerSession();
 
   return (
     <html lang="en" className={`${inter.variable}`}>
-      <body
-        className={`flex min-h-screen flex-col font-inter ${
-          navBarExpanded && "overflow-hidden"
-        }`}
-      >
-        <NavBar
-          navBarExpanded={navBarExpanded}
-          setNavBarExpanded={setNavBarExpanded}
-        />
-        {children}
-        <Footer />
-        <Toaster />
-      </body>
+      <Body session={session}>{children}</Body>
     </html>
   );
 };

@@ -9,6 +9,8 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { objectToFormData } from "@/lib/utils";
+import { BASE_URL } from "@/lib/constants";
 import {
   Select,
   SelectContent,
@@ -37,7 +39,7 @@ const SignUpForm = () => {
     email: z.string().email(),
     fullName: z.string(),
     password: z.string().min(8),
-    role: z.enum(["customer", "event_organizer"]),
+    role: z.enum(["CUSTOMER", "EVENT_ORGANIZER"]),
   });
 
   // Form Hook
@@ -47,6 +49,9 @@ const SignUpForm = () => {
 
   // Form Submit Handler (After validated with zod)
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    // Get form data
+    const formData = objectToFormData(values);
+
     // Intialize loading state
     toast({
       variant: "default",
@@ -57,13 +62,10 @@ const SignUpForm = () => {
 
     // Try catch to handle network error from fetch()
     try {
-      console.log(values);
-      const res = await fetch(
-        "https://random-data-api.com/api/users/random_user"
-      );
-      await fetch("https://random-data-api.com/api/users/random_user");
-      await fetch("https://random-data-api.com/api/users/random_user");
-      await fetch("https://random-data-api.com/api/users/random_user");
+      const res = await fetch(`${BASE_URL}/api/sign-up`, {
+        method: "POST",
+        body: formData,
+      });
       const resJSON = await res.json();
 
       // API error, Throw error message
@@ -174,8 +176,8 @@ const SignUpForm = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="customer">Customer</SelectItem>
-                    <SelectItem value="event_organizer">
+                    <SelectItem value="CUSTOMER">Customer</SelectItem>
+                    <SelectItem value="EVENT_ORGANIZER">
                       Event Organizer
                     </SelectItem>
                   </SelectContent>
