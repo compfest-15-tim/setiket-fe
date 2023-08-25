@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <main className="flex flex-auto flex-col justify-center bg-gray-100 bg-[url('/homepage-2.jpg')] bg-cover p-5 text-center text-white md:p-12">
       <div>
-        <h1 className="text-5xl font-bold lg:text-6xl">
+        <h1 className="text-5xl font-bold lg:text-6xl mt-10 md:mt-0">
           Welcome to{" "}
           <span className="font-extrabold text-primary">SeTiket!</span>
         </h1>
