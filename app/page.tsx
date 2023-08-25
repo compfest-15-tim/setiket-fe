@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function Home() {
   const arr = [1, 2, 3, 4, 5];
   return (
-    <main className="flex flex-auto flex-col justify-center bg-gray-100 bg-[url(/homepage-2.jpg)] bg-cover p-5 text-center text-white md:p-12">
+    <main className="flex flex-auto flex-col justify-center bg-gray-100 bg-[url('/homepage-2.jpg')] bg-cover p-5 text-center text-white md:p-12">
       <div>
         <h1 className="text-5xl font-bold lg:text-6xl">
           Welcome to{" "}
@@ -20,7 +20,7 @@ export default function Home() {
 
         <p className="mt-6 text-lg md:text-xl">
           Welcome to <span className="font-bold text-primary">SeTiket</span>,
-          where you can find & buy awesome events's ticket!
+          where you can find & buy awesome events&apos;s ticket!
         </p>
 
         <Link
