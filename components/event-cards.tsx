@@ -4,7 +4,7 @@ import { Separator } from "./ui/separator";
 import Link from "next/link";
 
 export interface Event {
-  id: string,
+  id: string;
   title: string;
   date: string;
   location: string;
