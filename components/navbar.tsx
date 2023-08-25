@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useRef, useEffect, type SetStateAction, type Dispatch } from "react";
 import { usePathname } from "next/navigation";
 import { Menu, X, Bell, LogOut } from "lucide-react";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { BASE_URL } from "@/lib/constants";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,10 +20,15 @@ import {
 const NavBar = ({
   navBarExpanded,
   setNavBarExpanded,
+  session,
 }: {
   navBarExpanded: boolean;
   setNavBarExpanded: Dispatch<SetStateAction<boolean>>;
+  session: Object | null;
 }) => {
+  // Router
+  const router = useRouter();
+
   // List of paths
   const paths = [
     {
@@ -29,9 +36,6 @@ const NavBar = ({
       url: "/events/",
     },
   ];
-
-  // Get session
-  const session = !null;
 
   // Get pathname
   const pathname = usePathname();
@@ -57,6 +61,17 @@ const NavBar = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [setNavBarExpanded]);
+
+  const onSignOut = () => {
+    // Sign out
+    fetch(`${BASE_URL}/api/sign-out`, {
+      method: "get",
+      credentials: "include",
+    }).then(() => {
+      router.push("/");
+      router.refresh();
+    });
+  };
 
   return (
     <nav className="sticky left-0 right-0 top-0 z-40 flex h-20 w-full flex-row items-center justify-between border-b-2 border-b-border bg-background px-7 lg:px-16 xl:h-[90px]">
@@ -113,9 +128,12 @@ const NavBar = ({
                   </Link>
                   {/* Add more if needed */}
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="flex flex-row gap-2 text-destructive focus:text-destructive">
+                  <DropdownMenuItem
+                    className="flex flex-row gap-2 text-destructive focus:text-destructive"
+                    onClick={onSignOut}
+                  >
                     <LogOut className="stroke-destructive" size={16} />
-                    Log Out
+                    Sign Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
