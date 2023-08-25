@@ -6,12 +6,22 @@ import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CustomerDataTable from "./customer-data-table";
 import { getCurrencyIDR } from "@/lib/utils";
+import { getServerSession } from "@/lib/auth-server";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "My Events | SeTiket",
 };
 
-const MyEventsDetailPage = () => {
+const MyEventsDetailPage = async () => {
+  // Get session
+  const session = await getServerSession();
+
+  // My event detail can only be accessed by EO
+  if (session && session.user_metadata.role !== "EVENT_ORGANIZER") {
+    notFound();
+  }
+
   // Get Event data
   const event = {
     id: "7b92a264-5ff2-4ea1-b5ef-62c2b9cda87a",

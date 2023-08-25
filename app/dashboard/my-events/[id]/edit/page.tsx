@@ -5,12 +5,22 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import EditEventForm from "./edit-event-form";
+import { getServerSession } from "@/lib/auth-server";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Create Event | SeTiket",
 };
 
-const EditEventPage = () => {
+const EditEventPage = async () => {
+  // Get session
+  const session = await getServerSession();
+
+  // Edit event page can only be accessed by event organizer
+  if (session && session.user_metadata.role !== "EVENT_ORGANIZER") {
+    notFound();
+  }
+
   // Get Event data
   const event = {
     id: "7b92a264-5ff2-4ea1-b5ef-62c2b9cda87a",

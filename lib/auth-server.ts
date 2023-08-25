@@ -1,8 +1,9 @@
 import { cookies } from "next/headers";
 import { BASE_URL } from "./constants";
+import { type Session } from "@/types/session";
 
 // Validate user in server
-export const getServerSession = async (): Promise<null | Object> => {
+export const getServerSession = async (): Promise<null | Session> => {
   // Get cookies
   const cookie = cookies();
   const accessToken = cookie.get("accessToken");

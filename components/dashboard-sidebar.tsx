@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
+import type { Session } from "@/types/session";
 import {
   Card,
   CardContent,
@@ -23,9 +24,11 @@ import {
   UserCheck,
 } from "lucide-react";
 
-export default function DashboardSidebar() {
+export default function DashboardSidebar({ session }: { session: Session }) {
   const pathname = usePathname();
+
   const isVerified = true; // from session data
+
   const customerMenus = [
     {
       name: "My Orders",
@@ -66,11 +69,19 @@ export default function DashboardSidebar() {
     ...adminMenus,
   ];
 
+  const role = session.user_metadata.role;
+  const additionalMenus =
+    role === "CUSTOMER"
+      ? customerMenus
+      : role === "EVENT_ORGANIZER"
+      ? eventOrganizerMenus
+      : adminMenus;
+
   return (
     <aside className="w-full lg:max-w-xs">
       <Card>
         <CardHeader className="flex flex-col gap-2">
-          <CardTitle>Henry Salim</CardTitle>
+          <CardTitle>{session.user_metadata.full_name}</CardTitle>
           <CardDescription
             className={`flex items-center gap-2 font-semibold ${
               isVerified ? "text-green-500" : "text-red-500"
@@ -82,7 +93,9 @@ export default function DashboardSidebar() {
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           {/* Print out user's role */}
-          <p className="text-sm uppercase text-gray-400">Customer</p>
+          <p className="text-sm uppercase text-gray-400">
+            {session.user_metadata.role}
+          </p>
 
           {/* User's menu */}
           <ul className="flex flex-col gap-3">
@@ -101,7 +114,7 @@ export default function DashboardSidebar() {
             </li>
 
             {/* User's menus based on users' role */}
-            {allMenuForEasyTesting.map((path, index) => (
+            {additionalMenus.map((path, index) => (
               <li key={index}>
                 <Link
                   href={path.url}

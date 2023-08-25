@@ -5,12 +5,21 @@ import { Plus } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import MyEventsTable from "./my-events-data-table";
+import { getServerSession } from "@/lib/auth-server";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "My Events | SeTiket",
 };
 
-const MyEventsPage = () => {
+const MyEventsPage = async () => {
+  const session = await getServerSession();
+
+  // My Events List page can only be accessed by event organizer
+  if (session && session.user_metadata.role !== "EVENT_ORGANIZER") {
+    notFound();
+  }
+  
   return (
     <section className="w-full">
       <Card>

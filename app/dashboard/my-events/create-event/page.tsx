@@ -11,13 +11,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { notFound } from "next/navigation";
+import { getServerSession } from "@/lib/auth-server";
 
 export const metadata: Metadata = {
   title: "Create Event | SeTiket",
 };
 
-const CreateEventPage = () => {
-  // Get Event data
+const CreateEventPage = async () => {
+  const session = await getServerSession();
+
+  // Create event can only be seen by event organizer
+  if (session && session.user_metadata.role !== "EVENT_ORGANIZER") {
+    notFound();
+  }
 
   return (
     <section className="w-full">
