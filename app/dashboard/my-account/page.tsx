@@ -53,7 +53,7 @@ export default async function MyAccountPage() {
               </PopoverTrigger>
               <PopoverContent className="absolute -left-16">
                 <h3 className="mb-6 text-xl font-semibold">Top Up Balance</h3>
-                <TopUpForm accessToken={accessToken?.value}/>
+                <TopUpForm accessToken={accessToken?.value} />
               </PopoverContent>
             </Popover>
 

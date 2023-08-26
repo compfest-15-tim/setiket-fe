@@ -51,7 +51,7 @@ const CreateEventPage = async () => {
         <Separator />
 
         <CardContent className="pt-6">
-          <CreateEventForm accessToken={accessToken?.value}/>
+          <CreateEventForm accessToken={accessToken?.value} />
         </CardContent>
       </Card>
     </section>
