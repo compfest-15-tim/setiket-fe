@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 export default async function MyAccountPage() {
   const session = await getServerSession();
   const cookie = cookies();
-  const accessToken = cookie.get("accessToken"); 
+  const accessToken = cookie.get("accessToken");
 
   if (!session) {
     redirect("/sign-in");
@@ -53,7 +53,7 @@ export default async function MyAccountPage() {
               </PopoverTrigger>
               <PopoverContent className="absolute -left-16">
                 <h3 className="mb-6 text-xl font-semibold">Top Up Balance</h3>
-                <TopUpForm accessToken={accessToken}/>
+                <TopUpForm accessToken={accessToken} />
               </PopoverContent>
             </Popover>
 
