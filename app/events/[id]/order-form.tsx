@@ -23,7 +23,7 @@ interface Event {
   images: string[];
   location: string;
   capacity: number;
-  status: "verified" | "pending" | "rejected";
+  status: string;
   category: string;
   price: number;
 }
