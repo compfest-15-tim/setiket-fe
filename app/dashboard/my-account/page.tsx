@@ -18,6 +18,7 @@ import { getCurrencyIDR, getFormattedDate } from "@/lib/utils";
 import { Metadata } from "next";
 import { getServerSession } from "@/lib/auth-server";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
   title: "My Account | SeTiket",
@@ -25,6 +26,8 @@ export const metadata: Metadata = {
 
 export default async function MyAccountPage() {
   const session = await getServerSession();
+  const cookie = cookies();
+  const accessToken = cookie.get("accessToken"); 
 
   if (!session) {
     redirect("/sign-in");
@@ -50,7 +53,7 @@ export default async function MyAccountPage() {
               </PopoverTrigger>
               <PopoverContent className="absolute -left-16">
                 <h3 className="mb-6 text-xl font-semibold">Top Up Balance</h3>
-                <TopUpForm />
+                <TopUpForm accessToken={accessToken}/>
               </PopoverContent>
             </Popover>
 

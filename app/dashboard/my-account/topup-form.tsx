@@ -16,11 +16,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { revalidatePath } from "next/cache";
+import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 
-export default function TopUpForm() {
+export default function TopUpForm({
+  accessToken,
+}: {
+  accessToken: RequestCookie | undefined;
+}) {
   // Toast hook
   const { toast } = useToast();
-
   // Router hook
   const router = useRouter();
 
@@ -47,9 +51,19 @@ export default function TopUpForm() {
     // Try catch to handle network error from fetch()
     try {
       console.log(values);
-      const res = await fetch(
-        "https://random-data-api.com/api/users/random_user"
-      );
+
+      const formData = new FormData();
+
+      formData.append("amount", values.amount.toString());
+
+      const res = await fetch("http://localhost:8000/api/user/topup", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${accessToken?.value}`,
+        },
+      });
+
       await fetch("https://random-data-api.com/api/users/random_user");
       await fetch("https://random-data-api.com/api/users/random_user");
       await fetch("https://random-data-api.com/api/users/random_user");
