@@ -54,8 +54,10 @@ const SignInForm = () => {
     // Try catch to handle network error from fetch()
     try {
       const res = await fetch(`${BASE_URL}/api/sign-in`, {
+        cache: "no-cache",
         method: "POST",
         credentials: "include",
+        mode: "cors",
         body: formData,
       });
       const resJSON = await res.json();

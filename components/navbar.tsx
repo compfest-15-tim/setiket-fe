@@ -65,7 +65,9 @@ const NavBar = ({
   const onSignOut = () => {
     // Sign out
     fetch(`${BASE_URL}/api/sign-out`, {
+      cache: "no-cache",
       method: "get",
+      mode: "cors",
       credentials: "include",
     }).then(() => {
       router.push("/");

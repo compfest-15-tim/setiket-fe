@@ -13,8 +13,10 @@ export const getServerSession = async (): Promise<null | Session> => {
 
   // Check if session exists/still valid on server
   const res = await fetch(`${BASE_URL}/api/session`, {
+    cache: "no-cache",
     method: "GET",
     credentials: "include",
+    mode: "cors",
     headers: { Authorization: `Bearer ${accessToken.value}` },
   });
 
