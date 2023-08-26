@@ -28,6 +28,7 @@ interface Event {
   status: "verified" | "pending" | "rejected";
   category: string;
   price: number;
+  booked: number;
 }
 
 // // Generate metadata
@@ -45,6 +46,7 @@ interface Event {
 
 const EventDetailPage = () => {
   const { id } = useParams();
+  
 
   const [eventDetail, setEventDetail] = useState({
     id: "7b92a264-5ff2-4ea1-b5ef-62c2b9cda87a",
@@ -58,6 +60,7 @@ const EventDetailPage = () => {
     status: "verified",
     category: "SEMINARS",
     price: 100000,
+    booked: 0
   });
 
   // Fetch data
@@ -92,7 +95,7 @@ const EventDetailPage = () => {
     fetchEventDetails(); // Call the function to fetch event data
   }, [id]);
 
-  const sold = 100;
+  const sold = eventDetail.booked;
   // Also get number of ticket solds
 
   return (
