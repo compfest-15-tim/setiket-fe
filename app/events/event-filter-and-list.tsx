@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
 
 export interface Event {
@@ -270,6 +270,23 @@ const EventFilterAndList = () => {
   const [categoryValue, setCategoryValue] = useState<string | undefined>();
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
 
+  useEffect(() => {
+    // Define a function to fetch event data here
+    const fetchEventData = async () => {
+      try {
+        const response = await fetch('https://setiket-api.up.railway.app/api/events');
+        const eventData = await response.json();
+        console.log(eventData)
+        setFilteredEvents(eventData);
+      } catch (error) {
+        console.error('Error fetching event data:', error);
+      }
+    };
+
+    fetchEventData(); 
+
+  }, []);
+
   const onClickSearch = () => {
     const filtered = initialEvents.filter((event) => {
       const isTitleMatched = event.title
@@ -428,7 +445,7 @@ const EventFilterAndList = () => {
                 <CardContent className="flex flex-auto flex-col justify-between px-4 pb-4">
                   <div>
                     <p>{event.location}</p>
-                    <p>{event.date}</p>
+                    <p>{new Date(event.date).toLocaleDateString()}</p>
                     <p>{event.category}</p>
                   </div>
                   <p className="text-lg font-bold text-red-500">
