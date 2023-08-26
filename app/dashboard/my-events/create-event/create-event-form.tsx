@@ -27,7 +27,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-const CreateEventForm = ({ accessToken }: { accessToken: string | undefined }) => {
+const CreateEventForm = ({
+  accessToken,
+}: {
+  accessToken: string | undefined;
+}) => {
   // Toast hook
   const { toast } = useToast();
 
