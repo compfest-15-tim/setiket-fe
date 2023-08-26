@@ -274,17 +274,18 @@ const EventFilterAndList = () => {
     // Define a function to fetch event data here
     const fetchEventData = async () => {
       try {
-        const response = await fetch('https://setiket-api.up.railway.app/api/events');
+        const response = await fetch(
+          "https://setiket-api.up.railway.app/api/events"
+        );
         const eventData = await response.json();
-        console.log(eventData)
+        console.log(eventData);
         setFilteredEvents(eventData);
       } catch (error) {
-        console.error('Error fetching event data:', error);
+        console.error("Error fetching event data:", error);
       }
     };
 
-    fetchEventData(); 
-
+    fetchEventData();
   }, []);
 
   const onClickSearch = () => {
