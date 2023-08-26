@@ -1,3 +1,5 @@
+"use client";
+
 import { type Metadata } from "next";
 import Link from "next/link";
 import { getCurrencyIDR, getFormattedDate } from "@/lib/utils";
@@ -12,6 +14,8 @@ import {
   CardContent,
   CardDescription,
 } from "@/components/ui/card";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 
 interface Event {
   id: string;
@@ -24,24 +28,26 @@ interface Event {
   status: "verified" | "pending" | "rejected";
   category: string;
   price: number;
+  booked: number;
 }
 
-// Generate metadata
-export const generateMetadata = async ({
-  params,
-}: {
-  params: { id: string };
-}): Promise<Metadata> => {
-  // Get event detail
+// // Generate metadata
+// export const generateMetadata = async ({
+//   params,
+// }: {
+//   params: { id: string };
+// }): Promise<Metadata> => {
+//   // Get event detail
 
-  return {
-    title: "Event Detail",
-  };
-};
+//   return {
+//     title: "Event Detail",
+//   };
+// };
 
 const EventDetailPage = () => {
-  // Fetch data
-  const eventDetail: Event = {
+  const { id } = useParams();
+
+  const [eventDetail, setEventDetail] = useState({
     id: "7b92a264-5ff2-4ea1-b5ef-62c2b9cda87a",
     title: "Tech Conference 2023",
     description:
@@ -53,8 +59,42 @@ const EventDetailPage = () => {
     status: "verified",
     category: "SEMINARS",
     price: 100000,
-  };
-  const sold = 100;
+    booked: 0,
+  });
+
+  // Fetch data
+  // const eventDetail: Event = {
+  //   id: "7b92a264-5ff2-4ea1-b5ef-62c2b9cda87a",
+  //   title: "Tech Conference 2023",
+  //   description:
+  //     "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum",
+  //   date: "2023-08-24T13:58:33.049Z",
+  //   images: ["/1.jpg", "/2.jpg", "/3.jpg", "/4.jpg"],
+  //   location: "San Francisco, USA",
+  //   capacity: 1200,
+  //   status: "verified",
+  //   category: "SEMINARS",
+  //   price: 100000,
+  // };
+
+  useEffect(() => {
+    // Define a function to fetch event data here
+    const fetchEventDetails = async () => {
+      try {
+        const response = await fetch(
+          `https://setiket-api.up.railway.app/api/events/${id}`
+        ); // Replace with your actual API endpoint
+        const eventDetails = await response.json();
+        setEventDetail(eventDetails);
+      } catch (error) {
+        console.error("Error fetching event data:", error);
+      }
+    };
+
+    fetchEventDetails(); // Call the function to fetch event data
+  }, [id]);
+
+  const sold = eventDetail.booked;
   // Also get number of ticket solds
 
   return (

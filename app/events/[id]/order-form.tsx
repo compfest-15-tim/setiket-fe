@@ -1,5 +1,3 @@
-"use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -14,6 +12,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { BASE_URL } from "@/lib/constants";
+import { useParams } from "next/navigation";
+import { getCookie } from "cookies-next";
+import { access } from "fs";
 
 interface Event {
   id: string;
@@ -23,7 +25,7 @@ interface Event {
   images: string[];
   location: string;
   capacity: number;
-  status: "verified" | "pending" | "rejected";
+  status: string;
   category: string;
   price: number;
 }
@@ -50,6 +52,10 @@ const OrderForm = ({
     resolver: zodResolver(FormSchema),
   });
 
+  const { id } = useParams();
+  const accessToken = getCookie("accessToken");
+  console.log(accessToken);
+
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     // Intialize loading state
     toast({
@@ -62,9 +68,18 @@ const OrderForm = ({
     // Try catch to handle network error from fetch()
     try {
       console.log(values);
-      const res = await fetch(
-        "https://random-data-api.com/api/users/random_user"
-      );
+
+      const formData = new FormData();
+      formData.append("quantity", values.quantity.toString());
+
+      const res = await fetch(`${BASE_URL}/api/events/${id}/book`, {
+        method: "POST",
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
       await fetch("https://random-data-api.com/api/users/random_user");
       await fetch("https://random-data-api.com/api/users/random_user");
       await fetch("https://random-data-api.com/api/users/random_user");

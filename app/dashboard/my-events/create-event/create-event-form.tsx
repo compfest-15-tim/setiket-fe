@@ -27,7 +27,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-const CreateEventForm = () => {
+const CreateEventForm = ({
+  accessToken,
+}: {
+  accessToken: string | undefined;
+}) => {
   // Toast hook
   const { toast } = useToast();
 
@@ -84,12 +88,39 @@ const CreateEventForm = () => {
     // Try catch to handle network error from fetch()
     try {
       console.log(values);
-      const res = await fetch(
-        "https://random-data-api.com/api/users/random_user"
-      );
-      await fetch("https://random-data-api.com/api/users/random_user");
-      await fetch("https://random-data-api.com/api/users/random_user");
-      await fetch("https://random-data-api.com/api/users/random_user");
+
+      const validatedData = formSchema.parse(values);
+
+      const formData = new FormData();
+
+      /* description: string;
+    images: FileList;
+    date: Date;
+    location: string;
+    capacity: number;
+    price: number; */
+
+      formData.append("title", values.title);
+      formData.append("description", values.description);
+      Array.from(values.images).forEach((file, index) => {
+        formData.append("images", file);
+      });
+      formData.append("date", values.date.toISOString());
+      formData.append("location", values.location);
+      formData.append("capacity", values.capacity.toString());
+      formData.append("price", values.price.toString());
+
+      const res = await fetch("https://setiket-api.up.railway.app/api/events", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      // await fetch("https://random-data-api.com/api/users/random_user");
+      // await fetch("https://random-data-api.com/api/users/random_user");
+      // await fetch("https://random-data-api.com/api/users/random_user");
       const resJSON = await res.json();
 
       // API error, Throw error message

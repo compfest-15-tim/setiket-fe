@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { notFound } from "next/navigation";
 import { getServerSession } from "@/lib/auth-server";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Create Event | SeTiket",
@@ -20,6 +21,8 @@ export const metadata: Metadata = {
 
 const CreateEventPage = async () => {
   const session = await getServerSession();
+  const cookie = cookies();
+  const accessToken = cookie.get("accessToken");
 
   // Create event can only be seen by event organizer
   if (session && session.user_metadata.role !== "EVENT_ORGANIZER") {
@@ -48,7 +51,7 @@ const CreateEventPage = async () => {
         <Separator />
 
         <CardContent className="pt-6">
-          <CreateEventForm />
+          <CreateEventForm accessToken={accessToken?.value} />
         </CardContent>
       </Card>
     </section>
