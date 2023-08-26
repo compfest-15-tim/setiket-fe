@@ -16,12 +16,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { revalidatePath } from "next/cache";
-import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 
 export default function TopUpForm({
   accessToken,
 }: {
-  accessToken: RequestCookie | undefined;
+  accessToken: string | undefined;
 }) {
   // Toast hook
   const { toast } = useToast();
@@ -60,7 +59,7 @@ export default function TopUpForm({
         method: "POST",
         body: formData,
         headers: {
-          Authorization: `Bearer ${accessToken?.value}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 

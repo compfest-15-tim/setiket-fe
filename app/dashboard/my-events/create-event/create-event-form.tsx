@@ -26,9 +26,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { cookies } from "next/headers";
 
-const CreateEventForm = () => {
+const CreateEventForm = ({ accessToken }: { accessToken: string | undefined }) => {
   // Toast hook
   const { toast } = useToast();
 
@@ -81,13 +80,11 @@ const CreateEventForm = () => {
       description: "Please wait...",
       duration: Infinity,
     });
-    
+
     // Try catch to handle network error from fetch()
     try {
       console.log(values);
-      const cookie = cookies();
-      const accessToken = cookie.get("accessToken"); 
-      
+
       const validatedData = formSchema.parse(values);
 
       const formData = new FormData();
@@ -108,7 +105,6 @@ const CreateEventForm = () => {
       formData.append("location", values.location);
       formData.append("capacity", values.capacity.toString());
       formData.append("price", values.price.toString());
-
 
       const res = await fetch("https://setiket-api.up.railway.app/api/events", {
         method: "POST",
