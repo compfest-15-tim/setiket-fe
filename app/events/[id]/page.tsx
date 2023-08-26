@@ -30,18 +30,18 @@ interface Event {
   price: number;
 }
 
-// Generate metadata
-export const generateMetadata = async ({
-  params,
-}: {
-  params: { id: string };
-}): Promise<Metadata> => {
-  // Get event detail
+// // Generate metadata
+// export const generateMetadata = async ({
+//   params,
+// }: {
+//   params: { id: string };
+// }): Promise<Metadata> => {
+//   // Get event detail
 
-  return {
-    title: "Event Detail",
-  };
-};
+//   return {
+//     title: "Event Detail",
+//   };
+// };
 
 const EventDetailPage = () => {
   const { id } = useParams();
