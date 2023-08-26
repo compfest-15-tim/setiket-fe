@@ -46,7 +46,6 @@ interface Event {
 
 const EventDetailPage = () => {
   const { id } = useParams();
-  
 
   const [eventDetail, setEventDetail] = useState({
     id: "7b92a264-5ff2-4ea1-b5ef-62c2b9cda87a",
@@ -60,7 +59,7 @@ const EventDetailPage = () => {
     status: "verified",
     category: "SEMINARS",
     price: 100000,
-    booked: 0
+    booked: 0,
   });
 
   // Fetch data
