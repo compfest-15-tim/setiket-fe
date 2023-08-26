@@ -17,7 +17,11 @@ import {
 } from "@/components/ui/form";
 import { BASE_URL } from "@/lib/constants";
 
-export default function WithdrawForm({accessToken} : {accessToken: string | undefined}) {
+export default function WithdrawForm({
+  accessToken,
+}: {
+  accessToken: string | undefined;
+}) {
   // Toast hook
   const { toast } = useToast();
 
@@ -59,7 +63,7 @@ export default function WithdrawForm({accessToken} : {accessToken: string | unde
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      
+
       // await fetch("https://random-data-api.com/api/users/random_user");
       // await fetch("https://random-data-api.com/api/users/random_user");
       // await fetch("https://random-data-api.com/api/users/random_user");

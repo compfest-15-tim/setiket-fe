@@ -67,7 +67,7 @@ export default async function MyAccountPage() {
                 <h3 className="mb-6 text-xl font-semibold">
                   Withdraw Your Balance
                 </h3>
-                <WithdrawForm accessToken={accessToken?.value}/>
+                <WithdrawForm accessToken={accessToken?.value} />
               </PopoverContent>
             </Popover>
           </div>
