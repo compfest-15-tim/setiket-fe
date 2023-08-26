@@ -38,7 +38,7 @@ export default async function MyAccountPage() {
   const role = session.user_metadata.role;
   const signedUpAt = getFormattedDate(new Date(session.confirmed_at));
   // GET BALANCE DATA
-  
+
   return (
     <Card className="h-[5%] w-full">
       <CardHeader>

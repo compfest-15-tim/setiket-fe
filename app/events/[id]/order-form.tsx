@@ -1,5 +1,3 @@
-
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -16,7 +14,7 @@ import {
 } from "@/components/ui/form";
 import { BASE_URL } from "@/lib/constants";
 import { useParams } from "next/navigation";
-import { getCookie } from 'cookies-next';
+import { getCookie } from "cookies-next";
 import { access } from "fs";
 
 interface Event {
@@ -54,12 +52,11 @@ const OrderForm = ({
     resolver: zodResolver(FormSchema),
   });
 
-  const {id} = useParams()
-  const accessToken = getCookie('accessToken')
-  console.log(accessToken)
+  const { id } = useParams();
+  const accessToken = getCookie("accessToken");
+  console.log(accessToken);
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    
     // Intialize loading state
     toast({
       variant: "default",

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { CalendarDays, MapPin, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
@@ -12,13 +12,13 @@ export interface Event {
   date: string;
   location: string;
   capacity: string;
-  booked: string
+  booked: string;
 }
 
 // Test Data
 
 export default function EventCards() {
-  const [events, setEvents] = useState<Event[]>()
+  const [events, setEvents] = useState<Event[]>();
 
   useEffect(() => {
     // Define a function to fetch event data here
