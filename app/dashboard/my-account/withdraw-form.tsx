@@ -15,8 +15,9 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { BASE_URL } from "@/lib/constants";
 
-export default function WithdrawForm() {
+export default function WithdrawForm({accessToken} : {accessToken: string | undefined}) {
   // Toast hook
   const { toast } = useToast();
 
@@ -46,12 +47,22 @@ export default function WithdrawForm() {
     // Try catch to handle network error from fetch()
     try {
       console.log(values);
-      const res = await fetch(
-        "https://random-data-api.com/api/users/random_user"
-      );
-      await fetch("https://random-data-api.com/api/users/random_user");
-      await fetch("https://random-data-api.com/api/users/random_user");
-      await fetch("https://random-data-api.com/api/users/random_user");
+
+      const formData = new FormData();
+
+      formData.append("amount", values.amount.toString());
+
+      const res = await fetch(`${BASE_URL}/api/user/withdraw`, {
+        method: "POST",
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      
+      // await fetch("https://random-data-api.com/api/users/random_user");
+      // await fetch("https://random-data-api.com/api/users/random_user");
+      // await fetch("https://random-data-api.com/api/users/random_user");
       const resJSON = await res.json();
 
       // API error, Throw error message

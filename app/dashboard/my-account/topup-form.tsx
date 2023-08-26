@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { revalidatePath } from "next/cache";
+import { BASE_URL } from "@/lib/constants";
 
 export default function TopUpForm({
   accessToken,
@@ -55,7 +56,7 @@ export default function TopUpForm({
 
       formData.append("amount", values.amount.toString());
 
-      const res = await fetch("http://localhost:8000/api/user/topup", {
+      const res = await fetch(`${BASE_URL}/api/user/topup`, {
         method: "POST",
         body: formData,
         headers: {
