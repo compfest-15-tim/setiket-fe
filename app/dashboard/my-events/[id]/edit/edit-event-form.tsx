@@ -238,9 +238,9 @@ const EditEventForm = () => {
                 <FormItem>
                   <FormLabel>Current Images</FormLabel>
                   <div className="flex flex-row flex-wrap items-center gap-4">
-                    {currentImages.map((imageUrl) => {
+                    {currentImages.map((images) => {
                       return (
-                        <div key={imageUrl} className="group relative">
+                        <div key={images} className="group relative">
                           {/* Delete Button */}
                           <Button
                             variant="destructive"
@@ -254,7 +254,7 @@ const EditEventForm = () => {
                             onClick={() => {
                               // Filter out the image that will be deleted
                               const newImages = currentImages.filter(
-                                (imageFilter) => imageFilter !== imageUrl
+                                (imageFilter) => imageFilter !== images
                               );
 
                               // Validate and update removed file
@@ -268,8 +268,8 @@ const EditEventForm = () => {
                           <Image
                             width={150}
                             height={150}
-                            alt={imageUrl}
-                            src={imageUrl}
+                            alt={images}
+                            src={images}
                             className="aspect-square w-24 rounded-lg object-cover object-center lg:w-36"
                           />
                         </div>
